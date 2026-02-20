@@ -432,6 +432,132 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 :root.light .ct-url-input::placeholder { color:rgba(30,26,20,0.4); }
 :root.light .debug-toggle { background:#f5f0e8; }
 :root.light .binaural-note { color:rgba(30,26,20,0.30); }
+
+/* ══ EQUALIZZATORE ══ */
+.eq-presets { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
+.eq-preset-btn {
+  flex:1; min-width:0; padding:8px 6px; border-radius:10px;
+  border:1px solid rgba(255,248,235,0.08);
+  background:rgba(255,248,235,0.035);
+  font-family:'DM Mono','Courier New',monospace; font-size:7.5px;
+  letter-spacing:.12em; text-transform:uppercase; text-align:center;
+  color:rgba(240,235,226,0.40); cursor:pointer; -webkit-appearance:none;
+  transition:all .2s; line-height:1.4;
+}
+.eq-preset-btn:active { transform:scale(.96); }
+.eq-preset-btn.active         { border-color:rgba(200,162,106,.55); background:rgba(200,162,106,.10); color:#c8a26a; }
+.eq-preset-btn.active.p-sage  { border-color:rgba(122,158,126,.55); background:rgba(122,158,126,.10); color:#7a9e7e; }
+.eq-preset-btn.active.p-rose  { border-color:rgba(176,122,138,.55); background:rgba(176,122,138,.10); color:#b07a8a; }
+.eq-preset-icon { font-size:13px; display:block; margin-bottom:3px; }
+.eq-bands {
+  display:flex; gap:6px; align-items:flex-end;
+  padding:14px 10px 10px;
+  background:rgba(255,248,235,0.02);
+  border:1px solid rgba(255,248,235,0.06); border-radius:13px;
+}
+.eq-band { flex:1; display:flex; flex-direction:column; align-items:center; gap:8px; }
+.eq-fader-wrap { width:28px; height:100px; position:relative; display:flex; align-items:center; justify-content:center; }
+.eq-fader-track { position:absolute; left:50%; transform:translateX(-50%); width:2px; height:100%; background:rgba(255,255,255,0.08); border-radius:2px; }
+.eq-zero-line { position:absolute; left:-4px; right:-4px; top:50%; height:1px; background:rgba(255,255,255,0.15); pointer-events:none; }
+.eq-fader-fill { position:absolute; left:0; right:0; border-radius:1px; transition:background .4s; }
+.eq-fader-thumb {
+  width:26px; height:26px; border-radius:50%;
+  background:rgba(255,248,235,0.92); border:2px solid #c8a26a;
+  box-shadow:0 2px 8px rgba(0,0,0,.5);
+  position:absolute; left:50%; transform:translate(-50%,-50%);
+  cursor:grab; touch-action:none;
+  transition:border-color .4s;
+}
+.eq-fader-thumb:active { cursor:grabbing; transform:translate(-50%,-50%) scale(1.1); }
+.eq-band-val {
+  font-family:'DM Mono','Courier New',monospace; font-size:8px;
+  color:rgba(240,235,226,0.45); letter-spacing:.04em;
+  min-width:36px; text-align:center; transition:color .3s;
+}
+.eq-band-lbl {
+  font-family:'DM Mono','Courier New',monospace; font-size:7px;
+  color:rgba(240,235,226,0.28); letter-spacing:.1em; text-transform:uppercase;
+  text-align:center; white-space:nowrap;
+}
+.eq-reset-btn {
+  width:100%; margin-top:10px; padding:9px; border-radius:10px;
+  border:1px solid rgba(255,255,255,0.07); background:transparent;
+  font-family:'DM Mono','Courier New',monospace; font-size:8px;
+  letter-spacing:.25em; text-transform:uppercase;
+  color:rgba(240,235,226,0.30); cursor:pointer; -webkit-appearance:none; transition:all .2s;
+}
+.eq-reset-btn:active { border-color:rgba(200,162,106,.3); color:#c8a26a; }
+:root.light .eq-band-lbl  { color:rgba(30,26,20,0.55); }
+:root.light .eq-band-val  { color:rgba(30,26,20,0.65); }
+:root.light .eq-fader-track { background:rgba(0,0,0,0.14); }
+:root.light .eq-fader-thumb { background:rgba(30,26,20,0.88); }
+:root.light .eq-zero-line { background:rgba(0,0,0,0.22); }
+
+/* EQ light: preset buttons visible even when inactive */
+:root.light .eq-preset-btn {
+  border-color:rgba(30,26,20,0.18);
+  background:rgba(30,26,20,0.04);
+  color:rgba(30,26,20,0.55);
+}
+/* EQ light: bands container */
+:root.light .eq-bands {
+  background:rgba(30,26,20,0.03);
+  border-color:rgba(30,26,20,0.12);
+}
+/* EQ light: reset button */
+:root.light .eq-reset-btn {
+  border-color:rgba(30,26,20,0.15);
+  color:rgba(30,26,20,0.45);
+}
+
+/* Theme select inside panel */
+.theme-select-panel {
+  -webkit-appearance:none; appearance:none;
+  padding:8px 14px; border-radius:10px;
+  border:1px solid rgba(200,162,106,.30);
+  background:rgba(200,162,106,.07);
+  color:#c8a26a;
+  font-family:'DM Mono','Courier New',monospace;
+  font-size:9px; letter-spacing:.18em;
+  cursor:pointer; outline:none;
+  min-width:110px; text-align:center;
+  transition:all .2s; flex-shrink:0;
+}
+:root.light .theme-select-panel {
+  border-color:rgba(154,108,50,.35);
+  background:rgba(154,108,50,.08);
+  color:#9a6c32;
+}
+
+/* Panel general light-theme contrast fixes */
+:root.light .panel-title { color:rgba(30,26,20,0.55); }
+:root.light .panel-section-title { color:rgba(30,26,20,0.45) !important; }
+:root.light .audio-note { background:rgba(30,26,20,0.04); border-color:rgba(30,26,20,0.10); }
+:root.light .audio-note-title { color:#9a6c32; }
+:root.light .audio-note-text { color:rgba(30,26,20,0.55); }
+:root.light .audio-note strong { color:#1e1a14; }
+:root.light .debug-key { color:rgba(30,26,20,0.55); }
+:root.light .debug-val { color:#1e1a14; }
+:root.light .debug-log { background:rgba(30,26,20,0.04); border-color:rgba(30,26,20,0.10); color:rgba(30,26,20,0.55); }
+:root.light .debug-btn { color:rgba(30,26,20,0.55); border-color:rgba(30,26,20,0.12); background:rgba(30,26,20,0.03); }
+:root.light .debug-btn.primary { color:#9a6c32; border-color:rgba(154,108,50,.30); }
+:root.light .ct-url-hint { color:rgba(30,26,20,0.40); }
+:root.light .ct-or { color:rgba(30,26,20,0.35); }
+:root.light .ct-file-name { color:#4a7a50; }
+:root.light .ct-file-meta { color:rgba(30,26,20,0.40); }
+:root.light .ct-change-btn { color:rgba(30,26,20,0.50); border-color:rgba(30,26,20,0.14); }
+:root.light .custom-time { color:rgba(30,26,20,0.50); }
+:root.light .custom-waveform { background:rgba(30,26,20,0.04); border-color:rgba(30,26,20,0.10); }
+:root.light .custom-play-btn { color:#1e1a14; border-color:rgba(30,26,20,0.15); background:rgba(30,26,20,0.04); }
+:root.light .custom-remove { color:rgba(30,26,20,0.40); border-color:rgba(30,26,20,0.12); }
+:root.light .sw { background:rgba(30,26,20,0.20); }
+:root.light .sw.on { background:#9a6c32; }
+:root.light .sw.on.sage { background:#4a7a50; }
+:root.light .sw-knob { background:#ffffff; box-shadow:0 2px 6px rgba(0,0,0,0.25); }
+:root.light .binaural-rec-icon { color:#9a6c32; }
+:root.light .sec-lbl { color:rgba(30,26,20,0.35); }
+:root.light .attr { color:rgba(30,26,20,0.35); }
+:root.light .binaural-note { color:rgba(30,26,20,0.40); }
 </style>
 </head>
 <body>
@@ -451,21 +577,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
   </div>
 
   <div class="sec" style="padding-top:16px;padding-bottom:0">
-    <div style="display:flex;gap:8px;align-items:stretch;">
-      <button class="save-btn" id="saveBtn" style="flex:1;"><span class="save-icon">↓</span> Salva impostazioni</button>
-      <select id="themeSelect" style="
-        flex-shrink:0;padding:0 10px;border-radius:12px;
-        border:1px solid rgba(200,162,106,.22);
-        background:rgba(200,162,106,.05);
-        color:var(--amber);font-family:var(--fm);
-        font-size:9px;letter-spacing:.18em;
-        cursor:pointer;-webkit-appearance:none;appearance:none;
-        outline:none;min-width:110px;text-align:center;transition:all .2s;
-      ">
-        <option value="dark">◑ Scuro</option>
-        <option value="light">◐ Chiaro</option>
-      </select>
-    </div>
+    <button class="save-btn" id="saveBtn"><span class="save-icon">↓</span> Salva impostazioni</button>
   </div>
 
   <!-- 01 — Pattern -->
@@ -711,15 +823,48 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <div class="audio-note-text">Gli oscillatori sinusoidali sommati creano picchi di ampiezza (clipping). Gli altoparlanti piccoli degli smartphone distorcono già a volumi medi, specialmente sotto i 100 Hz. Con le cuffie questo è quasi impercettibile.<br><br><strong style="color:#f0ebe2">Soluzione:</strong> il Limiter Master comprime i picchi · la Modalità Altoparlante taglia le sub-basse sotto 120 Hz.</div>
       </div>
     </div>
+
+    <!-- ═══ EQUALIZZATORE ═══ -->
+    <div class="panel-section">
+      <div class="panel-section-title">Equalizzatore</div>
+
+      <!-- Preset buttons -->
+      <div class="eq-presets">
+        <button class="eq-preset-btn" data-preset="flat" id="eqPresetFlat">
+          <span class="eq-preset-icon">▬</span>Flat
+        </button>
+        <button class="eq-preset-btn active" data-preset="box" id="eqPresetBox">
+          <span class="eq-preset-icon">◼</span>Box<br>Breathing
+        </button>
+        <button class="eq-preset-btn p-sage" data-preset="deep" id="eqPresetDeep">
+          <span class="eq-preset-icon">◉</span>Coerenza<br>Cardiaca
+        </button>
+        <button class="eq-preset-btn p-rose" data-preset="slow" id="eqPresetSlow">
+          <span class="eq-preset-icon">◈</span>Resp.<br>Lenta
+        </button>
+      </div>
+
+      <!-- 4-band vertical faders (built by JS) -->
+      <div class="eq-bands" id="eqBands"></div>
+
+      <button class="eq-reset-btn" id="eqResetBtn">◌ reset equalizzatore</button>
+    </div>
+
+    <!-- Tema -->
     <div class="panel-section">
       <div class="panel-section-title">Tema</div>
-      <div class="toggle-row">
+      <div class="toggle-row" style="border-bottom:none;">
         <div class="toggle-info">
-          <div class="toggle-label">Tema Chiaro</div>
-          <div class="toggle-desc">Passa dalla modalità scura a quella chiara.</div>
+          <div class="toggle-label">Modalità interfaccia</div>
+          <div class="toggle-desc">Scegli tra tema scuro e chiaro.</div>
         </div>
-        <button class="sw" id="swTheme" role="switch" aria-checked="false"><span class="sw-knob"></span></button>
+        <select id="themeSelect" class="theme-select-panel">
+          <option value="dark">◑ Scuro</option>
+          <option value="light">◐ Chiaro</option>
+        </select>
       </div>
+      <!-- hidden toggle kept for JS compatibility -->
+      <button class="sw" id="swTheme" role="switch" aria-checked="false" style="display:none;"><span class="sw-knob"></span></button>
     </div>
     <div class="panel-section">
       <div class="panel-section-title">Traccia Personale</div>
@@ -816,6 +961,7 @@ function setPanelColors(theme) {
   document.querySelectorAll('.toggle-row').forEach(function(el){ el.style.borderBottomColor=c.border; });
   document.querySelectorAll('.panel-section-title').forEach(function(el){ el.style.color=theme==='light'?'rgba(30,26,20,0.35)':'rgba(240,235,226,0.30)'; });
   var dt=document.getElementById('debugToggle'); if(dt) dt.style.backgroundColor=c.bg;
+  updateEqThumbColors();
 }
 
 /* ══ DATI ══ */
@@ -959,6 +1105,188 @@ var masterHPF=null,masterComp=null;
 /* Binaural nodes */
 var binauralNodes=null;
 
+/* ══ EQ DATA ══ */
+var EQ_BANDS_DEF = [
+  { id:'sub',  label:'Sub',  freq:80,   Q:0.8, color:'#9a9adb' },
+  { id:'bass', label:'Bass', freq:250,  Q:1.0, color:'#c8a26a' },
+  { id:'mid',  label:'Mid',  freq:1000, Q:1.2, color:'#7a9e7e' },
+  { id:'pres', label:'Pres', freq:4000, Q:1.5, color:'#b07a8a' }
+];
+/* Preset gains [sub, bass, mid, presence] dB
+   Box Breathing  : focus, presenza mentale vigile → taglia sub morbidi, alza presenza
+   Coerenza Card. : equilibrio caldo → sub caldi, bassi pieni, alta quasi piatta
+   Resp. Lenta    : massimo rilassamento → sub profondi, mid/alta tagliati          */
+var EQ_PRESETS = {
+  flat: [  0,  0,  0,  0 ],
+  box:  [ -2,  3,  1,  4 ],
+  deep: [  3,  4,  0, -1 ],
+  slow: [  5,  3, -2, -3 ]
+};
+var eqGains        = [0, 0, 0, 0];
+var eqNodes        = [];
+var currentEqPreset = 'box';
+var EQ_DB_MAX       = 12;
+
+/* ══ EQ AUDIO CHAIN ══ */
+function buildEQChain(){
+  if(!AC||!masterGain)return;
+  try{ masterGain.disconnect(); }catch(e){}
+  eqNodes = [];
+  var prev = masterGain;
+  EQ_BANDS_DEF.forEach(function(band, i){
+    var f = AC.createBiquadFilter();
+    f.type = 'peaking';
+    f.frequency.value = band.freq;
+    f.Q.value = band.Q;
+    f.gain.value = eqGains[i];
+    prev.connect(f);
+    eqNodes.push(f);
+    prev = f;
+  });
+  prev.connect(masterHPF);
+  masterHPF.connect(masterComp);
+  masterComp.connect(AC.destination);
+  dlog('EQ chain: 4 bande peaking','ok');
+}
+
+function applyEQGain(i, db){
+  eqGains[i] = db;
+  if(eqNodes[i] && AC)
+    eqNodes[i].gain.setTargetAtTime(db, AC.currentTime, 0.04);
+}
+
+function applyEQPreset(id, animate){
+  var gains = EQ_PRESETS[id]; if(!gains) return;
+  currentEqPreset = id;
+  gains.forEach(function(db, i){ applyEQGain(i, db); });
+  EQ_BANDS_DEF.forEach(function(_, i){ setFaderUI(i, eqGains[i], animate!==false); });
+  qsa('.eq-preset-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.preset===id); });
+  saveEQ();
+  dlog('EQ preset: '+id+' ['+gains.join(', ')+'] dB');
+}
+
+/* ══ EQ UI — vertical faders ══ */
+function buildEQUI(){
+  var container = qs('eqBands'); if(!container)return;
+  container.innerHTML = '';
+  EQ_BANDS_DEF.forEach(function(band, i){
+    /* Column */
+    var col  = mkEl('div','eq-band');
+    /* dB value label */
+    var valEl = mkEl('div','eq-band-val'); valEl.id='eqVal'+i; valEl.textContent='0 dB';
+    /* Fader track */
+    var wrap  = mkEl('div','eq-fader-wrap');
+    var track = mkEl('div','eq-fader-track'); track.id='eqTrack'+i;
+    var zero  = mkEl('div','eq-zero-line');
+    var fill  = mkEl('div','eq-fader-fill'); fill.id='eqFill'+i;
+    var thumb = mkEl('div','eq-fader-thumb'); thumb.id='eqThumb'+i;
+    thumb.style.borderColor = band.color;
+    thumb.style.boxShadow   = '0 2px 8px rgba(0,0,0,.5), 0 0 8px '+band.color+'44';
+    track.appendChild(zero); track.appendChild(fill); track.appendChild(thumb);
+    wrap.appendChild(track);
+    /* Freq label */
+    var lbl = mkEl('div','eq-band-lbl'); lbl.textContent=band.label;
+    col.appendChild(valEl); col.appendChild(wrap); col.appendChild(lbl);
+    container.appendChild(col);
+    setFaderUI(i, eqGains[i], false);
+    attachFaderDrag(i, track);
+  });
+}
+
+function setFaderUI(i, db, animate){
+  var thumb = document.getElementById('eqThumb'+i);
+  var fill  = document.getElementById('eqFill'+i);
+  var valEl = document.getElementById('eqVal'+i);
+  if(!thumb||!fill||!valEl) return;
+  var pct    = db / EQ_DB_MAX;          /* -1..+1 */
+  var topPct = 50 - pct*50;             /* 0%=top=+12dB, 100%=bottom=-12dB */
+  var dur    = animate ? '.22s' : '0s';
+  thumb.style.transition = 'top '+dur+' cubic-bezier(.4,0,.2,1), border-color .4s';
+  fill.style.transition  = 'height '+dur+' cubic-bezier(.4,0,.2,1), top '+dur+', background .4s';
+  thumb.style.top = topPct+'%';
+  /* Fill bar: from centre toward thumb */
+  var fillPct = Math.abs(pct)*50;
+  if(db >= 0){
+    fill.style.bottom='50%'; fill.style.top='auto';
+    fill.style.height=fillPct+'%';
+    fill.style.background = EQ_BANDS_DEF[i].color;
+  } else {
+    fill.style.top='50%'; fill.style.bottom='auto';
+    fill.style.height=fillPct+'%';
+    fill.style.background = '#b07a8a';
+  }
+  var label = db===0?'0 dB':(db>0?'+':'')+db.toFixed(0)+' dB';
+  valEl.textContent = label;
+  valEl.style.color = db===0?'rgba(240,235,226,0.32)':EQ_BANDS_DEF[i].color;
+}
+
+function attachFaderDrag(i, track){
+  var dragging=false;
+  function dbFromY(clientY){
+    var rect=track.getBoundingClientRect();
+    var rel=(clientY-rect.top)/rect.height; /* 0=top=+max, 1=bottom=-max */
+    var db=(0.5-rel)*2*EQ_DB_MAX;
+    return Math.max(-EQ_DB_MAX, Math.min(EQ_DB_MAX, Math.round(db)));
+  }
+  function onStart(e){
+    dragging=true;
+    currentEqPreset='custom';
+    qsa('.eq-preset-btn').forEach(function(b){b.classList.remove('active');});
+    e.preventDefault();
+  }
+  function onMove(e){
+    if(!dragging)return;
+    var cy=e.touches?e.touches[0].clientY:e.clientY;
+    var db=dbFromY(cy);
+    if(db!==eqGains[i]){ applyEQGain(i,db); setFaderUI(i,db,false); saveEQ(); }
+    e.preventDefault();
+  }
+  function onEnd(){ dragging=false; saveEQ(); }
+  var thumb=document.getElementById('eqThumb'+i);
+  thumb.addEventListener('mousedown',  onStart,{passive:false});
+  thumb.addEventListener('touchstart', onStart,{passive:false});
+  document.addEventListener('mousemove',  onMove,{passive:false});
+  document.addEventListener('touchmove',  onMove,{passive:false});
+  document.addEventListener('mouseup',  onEnd);
+  document.addEventListener('touchend', onEnd);
+  /* Click anywhere on track to jump */
+  track.addEventListener('click',function(e){
+    if(e.target===thumb)return;
+    var db=dbFromY(e.clientY);
+    applyEQGain(i,db); setFaderUI(i,db,true);
+    currentEqPreset='custom';
+    qsa('.eq-preset-btn').forEach(function(b){b.classList.remove('active');});
+    saveEQ();
+  });
+}
+
+function updateEqThumbColors(){
+  var isDark=(currentTheme!=='light');
+  EQ_BANDS_DEF.forEach(function(band,i){
+    var t=document.getElementById('eqThumb'+i);
+    if(t) t.style.background=isDark?'rgba(255,248,235,0.92)':'rgba(30,26,20,0.88)';
+  });
+}
+
+/* EQ persistence */
+function saveEQ(){ try{localStorage.setItem('respira_eq_v1',JSON.stringify({gains:eqGains,preset:currentEqPreset}));}catch(e){} }
+function loadEQ(){
+  try{
+    var r=localStorage.getItem('respira_eq_v1'); if(!r)return;
+    var s=JSON.parse(r);
+    if(Array.isArray(s.gains)&&s.gains.length===4) eqGains=s.gains;
+    if(s.preset) currentEqPreset=s.preset;
+  }catch(e){}
+}
+
+/* EQ preset buttons + reset */
+function wireEQButtons(){
+  qsa('.eq-preset-btn').forEach(function(btn){
+    btn.addEventListener('click',function(){ applyEQPreset(btn.dataset.preset, true); });
+  });
+  var rb=qs('eqResetBtn'); if(rb) rb.addEventListener('click',function(){ applyEQPreset('flat',true); });
+}
+
 function initAC(){
   if(AC)return true;
   try{
@@ -967,6 +1295,7 @@ function initAC(){
     masterHPF=AC.createBiquadFilter(); masterHPF.type='highpass'; masterHPF.Q.value=0.5;
     masterComp=AC.createDynamicsCompressor(); masterComp.threshold.value=-6; masterComp.knee.value=3; masterComp.ratio.value=12; masterComp.attack.value=0.003; masterComp.release.value=0.18;
     masterGain.connect(masterHPF); masterHPF.connect(masterComp); masterComp.connect(AC.destination);
+    buildEQChain();
     applyAudioProfile();
     dlog('AudioContext OK','ok'); return true;
   }catch(e){dlog('AudioContext FALLITO: '+e.message,'error');return false;}
@@ -1258,6 +1587,11 @@ qsa('.pattern-card').forEach(function(c){
     c.classList.add('active'); cfg.pattern=c.dataset.id;
     buildPreview(cfg.pattern);
     updateRecommendations();
+    /* c) Auto-apply matching EQ preset */
+    if(EQ_PRESETS[cfg.pattern]){
+      applyEQPreset(cfg.pattern, true);
+      dlog('EQ auto-preset → '+cfg.pattern);
+    }
   });
 });
 qsa('.dur-pill').forEach(function(p){p.addEventListener('click',function(){qsa('.dur-pill').forEach(function(x){x.classList.remove('active');});p.classList.add('active');cfg.minutes=parseInt(p.dataset.min);});});
@@ -1352,7 +1686,6 @@ function applyTheme(theme){
   setPanelColors(theme);
   var swTh=qs('swTheme'); if(swTh){swTh.classList.toggle('on',theme==='light');swTh.setAttribute('aria-checked',theme==='light'?'true':'false');}
   var tSel=qs('themeSelect'); if(tSel) tSel.value=theme;
-  var dt=qs('debugToggle'); if(dt)dt.style.backgroundColor=theme==='light'?'#f5f0e8':'#080705';
   try{localStorage.setItem(THEME_KEY,theme);}catch(e){}
 }
 (function(){
@@ -1375,6 +1708,8 @@ function openSettings(){
   swSet('swTheme',currentTheme==='light');
   swSet('swCustomTrack',customOpts.enabled);
   updateCustomTrackUI();
+  /* Sync EQ preset buttons */
+  qsa('.eq-preset-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.preset===currentEqPreset); });
   openPanel('settingsPanel');
 }
 function closeSettings(){closePanel('settingsPanel');}
@@ -1382,17 +1717,12 @@ qs('gearBtn').addEventListener('click',openSettings);
 qs('gearBtnSession').addEventListener('click',openSettings);
 qs('settingsClose').addEventListener('click',closeSettings);
 
-/* ── Theme select combo (header) ── */
+/* ── Theme select (now inside settings panel) ── */
 (function(){
-  var sel = qs('themeSelect');
-  if(!sel) return;
-  /* sync initial value after theme is applied */
-  sel.value = currentTheme;
-  sel.addEventListener('change', function(){
+  var sel=qs('themeSelect'); if(!sel)return;
+  sel.value=currentTheme;
+  sel.addEventListener('change',function(){
     applyTheme(this.value);
-    /* keep settings panel toggle in sync */
-    var swTh = qs('swTheme');
-    if(swTh){ swTh.classList.toggle('on', this.value==='light'); swTh.setAttribute('aria-checked', this.value==='light'?'true':'false'); }
   });
 })();
 
@@ -1440,7 +1770,8 @@ function startCustomAudioSession(onReady){
 function stopCustomAudioSession(){if(!customAudio)return;var audio=customAudio,steps=10,step=0,sv=audio.volume;var fi=setInterval(function(){step++;audio.volume=Math.max(sv*(1-step/steps),0);if(step>=steps){clearInterval(fi);audio.pause();audio.currentTime=0;if(customMediaNode){try{customMediaNode.disconnect();}catch(e){}customMediaNode=null;}if(customObjectURL)buildPreviewPlayer(customObjectURL);}},80);}
 
 /* ══ INIT ══ */
-dlog('App inizializzata · Web Audio API v2 · Binaural + MP3 tracks');
+dlog('App inizializzata · Web Audio API v2 · EQ 4 bande · Binaural + MP3 gapless');
+loadEQ();
 var hadSaved=loadSettings();
 if(hadSaved)dlog('Impostazioni ripristinate','ok');
 loadAllSettings();
@@ -1448,6 +1779,18 @@ applySettingsToUI();
 buildPreview(cfg.pattern);
 idbRestoreOnStartup();
 setPanelColors(currentTheme);
+buildEQUI();
+wireEQButtons();
+/* Apply loaded EQ gains to faders */
+EQ_BANDS_DEF.forEach(function(_,i){ setFaderUI(i,eqGains[i],false); });
+qsa('.eq-preset-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.preset===currentEqPreset); });
+/* If no saved EQ exists, set preset matching the loaded pattern */
+(function(){
+  try{ if(localStorage.getItem('respira_eq_v1')) return; }catch(e){}
+  if(EQ_PRESETS[cfg.pattern]){
+    applyEQPreset(cfg.pattern, false);
+  }
+})();
 </script>
 </body>
 </html>
