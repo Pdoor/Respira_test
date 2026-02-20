@@ -148,8 +148,10 @@ body::before {
 }
 .track-card:active { transform:scale(.985); }
 .track-card.active { border-color:rgba(200,162,106,.45); background:rgba(200,162,106,.07); }
+/* Real MP3 track active states */
 .track-card.active[data-tid="serenity"]     { border-color:rgba(122,158,122,.5); background:rgba(122,158,122,.07); }
 .track-card.active[data-tid="subterranean"] { border-color:rgba(122,138,180,.5); background:rgba(122,138,180,.07); }
+/* Recommendation glow */
 .track-card.rec-active { border-color:rgba(200,162,106,.35) !important; box-shadow:0 0 18px rgba(200,162,106,.08); }
 .track-card.rec-active[data-tid="serenity"]     { border-color:rgba(122,158,122,.35) !important; box-shadow:0 0 18px rgba(122,158,122,.08); }
 .track-card.rec-active[data-tid="subterranean"] { border-color:rgba(122,138,180,.35) !important; box-shadow:0 0 18px rgba(122,138,180,.08); }
@@ -157,14 +159,17 @@ body::before {
 .track-card.active .tk-icon { background:rgba(200,162,106,.1); border-color:rgba(200,162,106,.3); }
 .track-card.active[data-tid="serenity"] .tk-icon,
 .track-card.active[data-tid="subterranean"] .tk-icon { background:rgba(200,162,106,.08); border-color:rgba(200,162,106,.25); }
+/* Premium real-track icon style */
 .tk-icon.tk-real { font-size:13px; font-family:'DM Mono','Courier New',monospace; letter-spacing:-.02em; }
 .tk-info { flex:1; min-width:0; }
 .tk-name { font-size:15px; font-weight:400; color:#f0ebe2; color:var(--text); }
 .tk-desc { font-family:'DM Mono','Courier New',monospace; font-family:var(--fm); font-size:8.5px; color:rgba(240,235,226,0.40); color:var(--muted); margin-top:3px; letter-spacing:.03em; line-height:1.5; }
 .tk-badge { font-family:'DM Mono','Courier New',monospace; font-family:var(--fm); font-size:8px; color:rgba(240,235,226,0.18); color:var(--muted2); letter-spacing:.06em; padding:2px 7px; border:1px solid rgba(255,248,235,0.08); border:1px solid var(--border); border-radius:8px; flex-shrink:0; }
 .track-card.active .tk-badge { border-color:rgba(200,162,106,.3); color:#c8a26a; color:var(--amber); }
+/* Premium badge with real marker */
 .tk-badge.premium { color:rgba(200,162,106,.7); border-color:rgba(200,162,106,.25); background:rgba(200,162,106,.04); }
 .track-card.active .tk-badge.premium { color:#c8a26a; border-color:rgba(200,162,106,.5); background:rgba(200,162,106,.1); }
+/* Recommendation chip on track cards */
 .tk-rec-chip {
   font-family:'DM Mono','Courier New',monospace; font-size:7.5px; letter-spacing:.12em;
   padding:2px 7px; border-radius:8px; border:1px solid transparent;
@@ -178,6 +183,7 @@ body::before {
 .track-card.rec-active[data-tid="subterranean"] .tk-rec-chip {
   background:rgba(122,138,180,.08); color:rgba(122,138,180,.8); border-color:rgba(122,138,180,.2);
 }
+/* Loading state for MP3 tracks */
 .track-card.loading .tk-icon { opacity:.5; animation:pulse-tk 1.2s infinite; }
 @keyframes pulse-tk { 0%,100%{opacity:.5;} 50%{opacity:.9;} }
 
@@ -326,7 +332,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 }
 .gear-btn:active { transform:rotate(45deg) scale(.92); }
 
-/* ── OVERLAY PANELS ── */
+/* ── OVERLAY PANELS (Safari-proof) ── */
 .overlay-panel {
   position:fixed; top:0; left:0; width:100%; height:100%;
   background:#080705; z-index:2000;
@@ -350,6 +356,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 .toggle-label { font-size:15px; font-weight:400; color:#f0ebe2; letter-spacing:.02em; }
 .toggle-desc { font-family:'DM Mono','Courier New',monospace; font-size:8.5px; color:rgba(240,235,226,0.40); margin-top:3px; letter-spacing:.03em; line-height:1.5; }
 
+/* TOGGLE SWITCH (Safari-proof: real <span> knob) */
 .sw { width:51px; height:31px; border-radius:16px; background:rgba(120,120,128,0.32); position:relative; cursor:pointer; border:none; outline:none; -webkit-appearance:none; appearance:none; transition:background .25s; display:inline-block; flex-shrink:0; vertical-align:middle; padding:0; }
 .sw.on { background:#c8a26a; }
 .sw.on.sage { background:#7a9e7e; }
@@ -360,6 +367,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 .audio-note-title { font-family:'DM Mono','Courier New',monospace; font-size:8px; letter-spacing:.3em; color:#c8a26a; margin-bottom:6px; }
 .audio-note-text { font-family:'DM Mono','Courier New',monospace; font-size:8.5px; color:rgba(240,235,226,0.40); line-height:1.7; }
 
+/* Debug */
 .debug-section { margin-bottom:16px; }
 .debug-section-title { font-family:'DM Mono','Courier New',monospace; font-size:8px; letter-spacing:.3em; color:rgba(240,235,226,0.30); text-transform:uppercase; margin-bottom:8px; }
 .debug-row { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid rgba(255,255,255,.04); }
@@ -373,6 +381,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 .debug-toggle { position:fixed; bottom:max(env(safe-area-inset-bottom,0px),14px); right:18px; z-index:1500; font-family:'DM Mono','Courier New',monospace; font-size:8.5px; letter-spacing:.2em; color:rgba(240,235,226,0.30); background:#080705; border:1px solid rgba(255,255,255,.07); padding:6px 14px; border-radius:20px; cursor:pointer; -webkit-appearance:none; transition:all .2s; }
 .debug-toggle.has-error { color:#e07a7a; border-color:rgba(224,122,122,.25); }
 
+/* Custom track */
 .custom-track-area { margin-top:14px; border:1px solid rgba(255,255,255,0.07); border-radius:14px; overflow:hidden; transition:opacity .3s, border-color .3s; }
 .custom-track-area.disabled { opacity:.38; pointer-events:none; }
 #customFileInput { position:absolute; width:1px; height:1px; opacity:0; pointer-events:none; }
@@ -414,6 +423,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 @media (max-height:700px) { .app-header{padding:14px 24px 18px;} .countdown{font-size:clamp(76px,22vw,116px);} .breath-bars{height:50px;} .sec{padding:12px 24px 0;} }
 @media (max-height:620px) { .countdown{font-size:72px;} .breath-bars{height:42px;} }
 
+/* Light overrides */
 :root.light .pn,:root.light .tk-name,:root.light .bq-name { color:#1e1a14; }
 :root.light .toggle-label { color:#1e1a14; }
 :root.light .ct-pick-main { color:#1e1a14; }
@@ -458,6 +468,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
     </div>
   </div>
 
+  <!-- 01 — Pattern -->
   <div class="sec">
     <div class="sec-lbl">01 — Tecnica di respirazione</div>
     <div class="pattern-grid">
@@ -480,6 +491,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
     <div class="preview-box" id="previewBars" style="margin-top:10px;"></div>
   </div>
 
+  <!-- 02 — Durata -->
   <div class="sec">
     <div class="sec-lbl">02 — Durata sessione</div>
     <div class="dur-row">
@@ -492,10 +504,15 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
     </div>
   </div>
 
+  <!-- 03 — Atmosfera sonora -->
   <div class="sec">
     <div class="sec-lbl">03 — Atmosfera sonora</div>
     <div class="track-list">
+
+      <!-- ─── Tracce Reali 432 Hz ─── -->
       <div class="attr-divider" style="padding-top:0;padding-bottom:4px;"><span style="font-family:'DM Mono','Courier New',monospace;font-size:8px;letter-spacing:.22em;color:rgba(240,235,226,0.18);white-space:nowrap;">◎ TRACCE REALI · 432 Hz</span></div>
+
+      <!-- ─── Subsonic Serenity ─── -->
       <div class="track-card" data-tid="serenity">
         <div class="tk-icon tk-real">◈</div>
         <div class="tk-info">
@@ -505,6 +522,8 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         </div>
         <span class="tk-badge premium">432 Hz · real</span>
       </div>
+
+      <!-- ─── Subterranean Resonance ─── -->
       <div class="track-card" data-tid="subterranean">
         <div class="tk-icon tk-real">◉</div>
         <div class="tk-info">
@@ -514,7 +533,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         </div>
         <span class="tk-badge premium">432 Hz · real</span>
       </div>
+
+      <!-- ─── Separator ─── -->
       <div class="attr-divider"><span style="font-family:'DM Mono','Courier New',monospace;font-size:8px;letter-spacing:.22em;color:rgba(240,235,226,0.18);white-space:nowrap;">◎ SINTETICHE · GENERAZIONE REAL-TIME</span></div>
+
+      <!-- ─── Sintetiche ─── -->
       <div class="track-card active" data-tid="cosmos">
         <div class="tk-icon">🌌</div>
         <div class="tk-info">
@@ -547,16 +570,21 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         </div>
         <span class="tk-badge">sintetica</span>
       </div>
+
     </div>
     <div class="attr" style="padding-top:10px;">Sintetiche generate in real-time · Reali disponibili offline dopo il primo caricamento</div>
   </div>
 
+  <!-- 04 — Potenziamento Binaurale -->
   <div class="sec">
     <div class="sec-lbl">04 — Potenziamento Binaurale</div>
+
+    <!-- Smart recommendation chip -->
     <div class="binaural-rec" id="binauralRec">
       <span class="binaural-rec-icon">◎</span>
       <span class="binaural-rec-text" id="binauralRecText">Alpha 10 Hz consigliato per Box Breathing</span>
     </div>
+
     <div class="binaural-grid">
       <div class="binaural-card active" data-bid="none">
         <div class="bq-accent"></div>
@@ -566,6 +594,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         </div>
         <span class="bq-chip">off</span>
       </div>
+
       <div class="binaural-card rec-glow" data-bid="alpha">
         <div class="bq-accent"></div>
         <div class="bq-info">
@@ -575,6 +604,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         </div>
         <span class="bq-chip">live</span>
       </div>
+
       <div class="binaural-card" data-bid="theta">
         <div class="bq-accent"></div>
         <div class="bq-info">
@@ -585,9 +615,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <span class="bq-chip">live</span>
       </div>
     </div>
+
     <div class="binaural-note">🎧 Richiede cuffie per l'effetto binaurale · generato in tempo reale dall'app</div>
   </div>
 
+  <!-- 05 — Volume -->
   <div class="sec" style="padding-bottom:0">
     <div class="sec-lbl">05 — Volume</div>
     <div class="vol-wrap">
@@ -769,7 +801,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 <script>
 'use strict';
 
-/* ══ PANEL COLORS ══ */
+/* ══ PANEL COLORS (Safari-proof: set via JS not CSS vars) ══ */
 var PANEL_COLORS = {
   dark:  { bg:'#080705', border:'rgba(255,255,255,0.07)', text:'#f0ebe2', muted:'rgba(240,235,226,0.40)' },
   light: { bg:'#f5f0e8', border:'rgba(60,40,10,0.10)',    text:'#1e1a14', muted:'rgba(30,26,20,0.45)' }
@@ -794,6 +826,7 @@ var PATTERNS = {
 };
 var PC = { Inspira:'#c8a26a', Trattieni:'#7a9e7e', Espira:'#b07a8a', Pausa:'#9a8a78' };
 
+/* ── Tracce: sintetiche + reali MP3 ── */
 var TRACKS = {
   cosmos:       { name:'Cosmo',                  color:'#7a8ea0', icon:'🌌', synth:true },
   forest:       { name:'Foresta',                color:'#7a9e7a', icon:'🌿', synth:true },
@@ -803,6 +836,7 @@ var TRACKS = {
   subterranean: { name:'Subterranean Resonance', color:'#7a8aae', icon:'◉',  synth:false, url:'432-4444-Subterranean_Resonance.mp3',   recFor:['box'] }
 };
 
+/* ── Modi binaurali ── */
 var BINAURAL = {
   none:  { name:'Nessuno',     hz:0,  base:0,   beat:0,   recFor:[] },
   alpha: { name:'Alpha 10 Hz', hz:10, base:432, beat:10,  recFor:['box'],        desc:'Alpha 10 Hz · consigliato per Box Breathing' },
@@ -850,22 +884,28 @@ function loadAllSettings() {
 /* ══ SMART RECOMMENDATIONS ══ */
 function updateRecommendations() {
   var pat = cfg.pattern;
+
+  /* Track recommendation chips */
   qsa('.track-card').forEach(function(c) {
     var tid = c.dataset.tid;
     var t = TRACKS[tid];
     var isRec = t && t.recFor && t.recFor.indexOf(pat) !== -1;
     c.classList.toggle('rec-active', isRec);
   });
+
+  /* Binaural recommendation chips + glow */
   qsa('.binaural-card').forEach(function(c) {
     var bid = c.dataset.bid;
     var b = BINAURAL[bid];
     var isRec = b && b.recFor && b.recFor.indexOf(pat) !== -1;
     c.classList.toggle('rec-glow', isRec);
   });
+
+  /* Top recommendation banner */
   var rec = qs('binauralRec');
   var recTxt = qs('binauralRecText');
   if (pat === 'box') {
-    rec.className = 'binaural-rec';
+    rec.className = 'binaural-rec'; /* amber */
     recTxt.textContent = 'Binaural Alpha 10 Hz consigliato per Box Breathing';
     rec.classList.remove('hidden');
   } else if (pat === 'deep' || pat === 'slow') {
@@ -889,9 +929,9 @@ function updateDebug(){
   dset('dbRes',window.screen.width+'×'+window.screen.height+' @'+window.devicePixelRatio+'x');
   dset('dbAC',AC?'stato: '+AC.state+(AC.state==='running'?' ✓':''):'non inizializzato',AC&&AC.state==='running'?'ok':'warn');
   dset('dbSynth',synthActive?'in esecuzione ✓':'fermo',synthActive?'ok':'warn');
-  var tn=TRACKS[cfg.track]; dset('dbTrack',cfg.track+' · '+(tn?tn.name:'?')+(tn&&!tn.synth?' [MP3-buffer]':' [synth]'));
+  var tn=TRACKS[cfg.track]; dset('dbTrack',cfg.track+' · '+(tn?tn.name:'?')+(tn&&!tn.synth?' [MP3]':' [synth]'));
   dset('dbBinaural',cfg.binaural==='none'?'off':BINAURAL[cfg.binaural].name+(binauralNodes?' ✓':' (non avviato)'),cfg.binaural!=='none'&&binauralNodes?'ok':'warn');
-  dset('dbNodes',activeNodes.length+' nodi sintetica · mp3buf:'+(mp3Source?'attivo':'off')+' · binaural:'+(binauralNodes?'attivo':'off'));
+  dset('dbNodes',activeNodes.length+' nodi sintetica · binaural: '+(binauralNodes?'attivo':'off'));
 }
 function showDebugToggle(show){qs('debugToggle').classList.toggle('hidden',!show);}
 
@@ -904,7 +944,7 @@ qs('dbCopy').addEventListener('click',function(){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(function(){var b=qs('dbCopy');b.textContent='✓ Copiato';setTimeout(function(){b.textContent='Copia log';},2000);});}
 });
 
-/* ══ PANEL OPEN/CLOSE ══ */
+/* ══ PANEL OPEN/CLOSE (Safari-proof) ══ */
 function openPanel(id) {
   var el=qs(id); if(!el)return;
   setPanelColors(currentTheme);
@@ -916,12 +956,6 @@ function closePanel(id) { var el=qs(id); if(el)el.classList.add('hidden'); }
 /* ══ WEB AUDIO ENGINE ══ */
 var AC=null,masterGain=null,activeNodes=[],synthActive=false,synthTimers=[];
 var masterHPF=null,masterComp=null;
-
-/* ── MP3 track nodes — buffer engine (zero-gap loop, iOS-safe) ── */
-var mp3Audio=null, mp3MediaNode=null; /* kept for custom track compatibility */
-var mp3Buffer=null, mp3Source=null, mp3GainNode=null, mp3Loading=false;
-var MP3_FADE_IN=3.0, MP3_FADE_OUT=1.8;
-
 /* Binaural nodes */
 var binauralNodes=null;
 
@@ -947,12 +981,7 @@ function applyAudioProfile(){
   dlog('Profilo: '+(audioOpts.headphones?'Cuffie':'Altoparlanti')+' · Limiter:'+(audioOpts.limiter?'ON':'OFF'));
 }
 function resumeAC(){if(AC&&AC.state==='suspended')AC.resume();}
-function setMasterVol(v){
-  cfg.vol=v;
-  if(masterGain&&AC)masterGain.gain.setTargetAtTime(v,AC.currentTime,0.1);
-  /* Sync MP3 buffer gain node */
-  if(mp3GainNode&&AC)mp3GainNode.gain.setTargetAtTime(v,AC.currentTime,0.12);
-}
+function setMasterVol(v){cfg.vol=v;if(masterGain&&AC)masterGain.gain.setTargetAtTime(v,AC.currentTime,0.1);}
 
 /* ── Synth helpers ── */
 function mkOsc(type,freq,gain,detune){
@@ -1006,108 +1035,84 @@ function startTemple(){
   synthTimers.push(setTimeout(bell,600)); synthTimers.push(setTimeout(bell,5000+Math.random()*3000));
 }
 
-/* ══ MP3 TRACK ENGINE — Buffer-based, zero-gap loop, iOS Safari safe ══
- *
- *  Strategia:
- *    fetch → ArrayBuffer → AC.decodeAudioData (callback form, iOS compatible)
- *    → AudioBufferSourceNode con .loop = true
- *
- *  Vantaggi rispetto a HTMLAudioElement + createMediaElementSource:
- *  ✅ Loop sample-accurate: nessun gap al punto di loop (gestito dal browser a livello PCM)
- *  ✅ Fade in su GainNode dedicato (mp3GainNode) — masterGain non viene azzerato
- *  ✅ Fade out fluido prima dello stop
- *  ✅ Buffer cachato: il secondo avvio (es. cambio pattern) è istantaneo
- *  ✅ iOS Safari 14+: usa la forma callback di decodeAudioData, non la Promise
- *     (la Promise non è supportata su alcuni Safari mobile)
- */
-function stopMP3(onDone){
-  var g=mp3GainNode, s=mp3Source;
-  mp3Source=null; mp3GainNode=null; mp3Loading=false;
-  mp3Audio=null; mp3MediaNode=null;
-  if(!g&&!s){if(onDone)onDone();return;}
-  if(g&&AC){
-    /* Fade out sul GainNode dedicato */
-    var t=AC.currentTime;
-    g.gain.cancelScheduledValues(t);
-    g.gain.setValueAtTime(g.gain.value,t);
-    g.gain.linearRampToValueAtTime(0, t+MP3_FADE_OUT);
-    setTimeout(function(){
-      if(s){try{s.stop();}catch(e){}try{s.disconnect();}catch(e){}}
-      try{g.disconnect();}catch(e){}
-      dlog('MP3 fermato · fade out ok');
-      if(onDone)onDone();
-    },(MP3_FADE_OUT+0.15)*1000);
-  } else {
-    if(s){try{s.stop();}catch(e){}}
-    if(onDone)onDone();
+/* ── MP3 gapless engine (AudioBuffer loop — zero-gap, sample-accurate) ── */
+/* Cache decoded buffers so repeat plays skip the fetch/decode step */
+var mp3BufferCache = {};
+var mp3SourceNode  = null;   /* current AudioBufferSourceNode */
+var mp3GainNode    = null;   /* per-track gain for fade-in/out */
+
+function stopMP3(){
+  if(!mp3SourceNode) return;
+  var src = mp3SourceNode, gn = mp3GainNode;
+  mp3SourceNode = null; mp3GainNode = null;
+  /* Soft fade-out then stop */
+  if(AC && gn){
+    gn.gain.setTargetAtTime(0, AC.currentTime, 0.3);
   }
-}
-
-function _playMP3Buffer(buffer, onReady){
-  if(!AC||!masterGain)return;
-  resumeAC();
-  /* GainNode dedicato: fade in da 0 → cfg.vol senza toccare masterGain globale */
-  var g=AC.createGain();
-  g.gain.setValueAtTime(0, AC.currentTime);
-  g.gain.linearRampToValueAtTime(cfg.vol, AC.currentTime+MP3_FADE_IN);
-  g.connect(masterGain);
-
-  var src=AC.createBufferSource();
-  src.buffer=buffer;
-  src.loop=true;   /* sample-accurate, zero gap — gestito dal browser a livello PCM */
-  src.connect(g);
-  src.start(0);
-
-  mp3Source=src;
-  mp3GainNode=g;
-
-  dlog('MP3 buffer avviato · zero-gap loop · '+TRACKS[cfg.track].name,'ok');
-  if(onReady)onReady('◈ '+TRACKS[cfg.track].name+' · 432 Hz · in ascolto');
+  setTimeout(function(){
+    try{ src.stop(); }catch(e){}
+    try{ src.disconnect(); }catch(e){}
+    if(gn) try{ gn.disconnect(); }catch(e){}
+    dlog('MP3 fermato');
+  }, 1000);
 }
 
 function startMP3(url, onReady){
-  if(!AC){dlog('AC non pronto per MP3','error');return;}
+  stopMP3();
+  if(!AC){ dlog('AC non pronto per MP3','error'); return; }
   resumeAC();
 
-  /* Cache: stesso URL già decodificato → avvio immediato, nessun fetch */
-  if(mp3Buffer&&mp3Buffer._srcUrl===url){
-    dlog('Reuso buffer MP3 cached');
-    _playMP3Buffer(mp3Buffer, onReady);
-    if(cfg.binaural!=='none')startBinaural(cfg.binaural);
+  function _play(audioBuffer){
+    if(!AC) return;
+    /* Create a dedicated gain node for this track (fade-in) */
+    var gn = AC.createGain();
+    gn.gain.setValueAtTime(0, AC.currentTime);
+    gn.gain.linearRampToValueAtTime(cfg.vol, AC.currentTime + 2.5);
+    gn.connect(masterGain);
+
+    var src = AC.createBufferSource();
+    src.buffer = audioBuffer;
+    src.loop   = true;
+    /* loopStart/loopEnd = 0 & duration → Web Audio loops the exact sample
+       range with zero gap. No ID3 tags, no decoder padding issues. */
+    src.loopStart = 0;
+    src.loopEnd   = audioBuffer.duration;
+    src.connect(gn);
+    src.start(0);
+
+    mp3SourceNode = src;
+    mp3GainNode   = gn;
+
+    dlog('MP3 gapless avviato: '+url+' ('+audioBuffer.duration.toFixed(2)+'s)','ok');
+    if(onReady) onReady('◈ '+TRACKS[cfg.track].name+' · 432 Hz · in ascolto');
+  }
+
+  /* Use cached buffer if available */
+  if(mp3BufferCache[url]){
+    dlog('MP3 buffer cached, avvio immediato');
+    _play(mp3BufferCache[url]);
     return;
   }
 
-  mp3Loading=true;
-  if(onReady)onReady('⟳ Caricamento '+(TRACKS[cfg.track]?TRACKS[cfg.track].name:url)+'…');
-  dlog('Fetch+decode MP3: '+url);
+  /* Fetch + decode → cache → play */
+  dlog('MP3 fetch: '+url);
+  if(onReady) onReady('⏳ Caricamento traccia 432 Hz…');
 
   fetch(url)
     .then(function(r){
-      if(!r.ok)throw new Error('HTTP '+r.status);
+      if(!r.ok) throw new Error('HTTP '+r.status);
       return r.arrayBuffer();
     })
     .then(function(ab){
-      /* Forma CALLBACK di decodeAudioData: supportata da tutti i Safari/iOS
-         La forma Promise non è disponibile su Safari <= 14 */
-      return new Promise(function(resolve,reject){
-        AC.decodeAudioData(ab,
-          function(buf){resolve(buf);},
-          function(e){reject(e||new Error('decode failed'));}
-        );
-      });
+      return AC.decodeAudioData(ab);
     })
-    .then(function(buffer){
-      if(!mp3Loading){dlog('Fetch MP3 annullato');return;} /* stopMP3 chiamato nel frattempo */
-      buffer._srcUrl=url; /* tag per cache */
-      mp3Buffer=buffer;
-      mp3Loading=false;
-      _playMP3Buffer(buffer, onReady);
-      if(cfg.binaural!=='none')startBinaural(cfg.binaural);
+    .then(function(audioBuffer){
+      mp3BufferCache[url] = audioBuffer;   /* cache for instant replay */
+      _play(audioBuffer);
     })
     .catch(function(e){
-      mp3Loading=false;
-      dlog('MP3 fetch/decode err: '+e.message,'error');
-      if(onReady)onReady('⚠ Errore caricamento traccia');
+      dlog('MP3 load err: '+e.message,'error');
+      if(onReady) onReady('⚠ Errore caricamento traccia');
     });
 }
 
@@ -1136,27 +1141,27 @@ function startBinaural(mode){
   var right = AC.createOscillator();
   left.type  = 'sine'; left.frequency.value  = freqL;
   right.type = 'sine'; right.frequency.value = freqR;
+  /* Stereo panning: StereoPannerNode (Safari 15+) or PannerNode fallback */
+  var panL=null, panR=null;
   if(AC.createStereoPanner){
-    var panL = AC.createStereoPanner(); panL.pan.value = -1;
-    var panR = AC.createStereoPanner(); panR.pan.value =  1;
+    panL = AC.createStereoPanner(); panL.pan.value = -1;
+    panR = AC.createStereoPanner(); panR.pan.value =  1;
     left.connect(panL);  panL.connect(gainB);
     right.connect(panR); panR.connect(gainB);
-    gainB.connect(AC.destination);
-    left.start(0); right.start(0);
-    binauralNodes = { left:left, right:right, gain:gainB, panL:panL, panR:panR };
   } else {
+    /* Fallback: summed mono (binaural effect lost, but audio works) */
     left.connect(gainB); right.connect(gainB);
-    gainB.connect(AC.destination);
-    left.start(0); right.start(0);
-    binauralNodes = { left:left, right:right, gain:gainB, panL:null, panR:null };
     dlog('StereoPanner non disponibile · binaural in mono','warn');
   }
+  gainB.connect(AC.destination); /* Direct to destination for pure stereo */
+  left.start(0); right.start(0);
+  binauralNodes = { left:left, right:right, gain:gainB, panL:panL, panR:panR };
   dlog('Binaural: '+freqL+' Hz (L) · '+freqR+' Hz (R) · beat '+b.beat+' Hz ['+b.name+']','ok');
 }
 
 /* ── Main synth start/stop ── */
 function stopSynth(){
-  synthActive=false; mp3Loading=false; stopBinaural();
+  synthActive=false; stopBinaural();
   if(customOpts.enabled&&customLoaded){ stopCustomAudioSession(); synthTimers.forEach(function(t){clearTimeout(t);}); synthTimers=[]; return; }
   if(TRACKS[cfg.track]&&!TRACKS[cfg.track].synth){ stopMP3(); synthTimers=[]; return; }
   synthTimers.forEach(function(t){clearTimeout(t);}); synthTimers=[];
@@ -1175,6 +1180,7 @@ function stopSynth(){
 }
 function startSynth(trackId, onReady){
   if(!AC){dlog('AC non disponibile','error');return;}
+  /* Custom track override */
   if(customOpts.enabled&&customLoaded){
     synthActive=true; activeNodes=[];
     var ok=startCustomAudioSession(onReady);
@@ -1184,9 +1190,12 @@ function startSynth(trackId, onReady){
   }
   resumeAC(); synthActive=true; activeNodes=[];
   var track = TRACKS[trackId];
+  /* MP3 real track */
   if(track&&!track.synth){
-    /* MP3 track: startMP3 gestisce internamente binaural e onReady */
-    startMP3(track.url, onReady);
+    startMP3(track.url, function(msg){
+      if(cfg.binaural!=='none') startBinaural(cfg.binaural);
+      if(onReady) onReady(msg + (cfg.binaural!=='none'?' · '+BINAURAL[cfg.binaural].name:''));
+    });
     return;
   }
   /* Synth track */
@@ -1208,14 +1217,8 @@ document.addEventListener('visibilitychange',function(){
   if(!document.hidden){
     if(AC&&AC.state==='suspended') AC.resume().then(function(){dlog('AC resumed');});
     if(sess.timer){
-      /* Per buffer MP3: il nodo è già attivo (AudioBufferSourceNode non si sospende).
-         Se il contesto era suspended, il resume sopra è sufficiente. */
-      if(customOpts.enabled&&customLoaded){
-        if(customAudio&&customAudio.paused){customAudio.play().catch(function(){});dlog('Traccia ripresa');}
-      } else if(!synthActive&&!mp3Source){
-        dlog('Riavvio sintesi','ok');
-        startSynth(cfg.track,function(msg){var tt=qs('tickerText');if(tt)tt.textContent=msg;});
-      }
+      if(customOpts.enabled&&customLoaded){ if(customAudio&&customAudio.paused){customAudio.play().catch(function(){});dlog('Traccia ripresa');} }
+      else if(!synthActive){ dlog('Riavvio sintesi','ok'); startSynth(cfg.track,function(msg){var tt=qs('tickerText');if(tt)tt.textContent=msg;}); }
     }
   }
 });
@@ -1379,12 +1382,15 @@ qs('gearBtn').addEventListener('click',openSettings);
 qs('gearBtnSession').addEventListener('click',openSettings);
 qs('settingsClose').addEventListener('click',closeSettings);
 
+/* ── Theme select combo (header) ── */
 (function(){
   var sel = qs('themeSelect');
   if(!sel) return;
+  /* sync initial value after theme is applied */
   sel.value = currentTheme;
   sel.addEventListener('change', function(){
     applyTheme(this.value);
+    /* keep settings panel toggle in sync */
     var swTh = qs('swTheme');
     if(swTh){ swTh.classList.toggle('on', this.value==='light'); swTh.setAttribute('aria-checked', this.value==='light'?'true':'false'); }
   });
@@ -1434,7 +1440,7 @@ function startCustomAudioSession(onReady){
 function stopCustomAudioSession(){if(!customAudio)return;var audio=customAudio,steps=10,step=0,sv=audio.volume;var fi=setInterval(function(){step++;audio.volume=Math.max(sv*(1-step/steps),0);if(step>=steps){clearInterval(fi);audio.pause();audio.currentTime=0;if(customMediaNode){try{customMediaNode.disconnect();}catch(e){}customMediaNode=null;}if(customObjectURL)buildPreviewPlayer(customObjectURL);}},80);}
 
 /* ══ INIT ══ */
-dlog('App inizializzata · Web Audio API v3 · Buffer MP3 zero-gap + Binaural + Custom track');
+dlog('App inizializzata · Web Audio API v2 · Binaural + MP3 tracks');
 var hadSaved=loadSettings();
 if(hadSaved)dlog('Impostazioni ripristinate','ok');
 loadAllSettings();
