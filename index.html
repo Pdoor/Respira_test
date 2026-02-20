@@ -254,6 +254,16 @@ body::before {
 .save-btn:active { background:rgba(200,162,106,.12); transform:scale(.98); }
 .save-btn.saved { border-color:rgba(122,158,126,.35); color:#7a9e7e; color:var(--sage); background:rgba(122,158,126,.06); }
 .save-icon { font-size:12px; }
+.theme-toggle-btn {
+  flex-shrink:0; padding:0 15px; border-radius:12px;
+  border:1px solid rgba(200,162,106,.22);
+  background:rgba(200,162,106,.05); color:var(--amber);
+  font-family:var(--fm); font-size:8.5px; letter-spacing:.16em;
+  cursor:pointer; -webkit-appearance:none; appearance:none;
+  outline:none; white-space:nowrap; transition:all .2s;
+  display:flex; align-items:center; gap:7px; text-transform:uppercase;
+}
+.theme-toggle-btn:active { background:rgba(200,162,106,.14); transform:scale(.97); }
 .vol-wrap { display:flex; align-items:center; gap:12px; }
 .vi { font-size:13px; color:rgba(240,235,226,0.40); color:var(--muted); }
 input[type=range] { flex:1; -webkit-appearance:none; appearance:none; height:2px; background:rgba(255,255,255,0.12); background:var(--range-track); border-radius:2px; outline:none; }
@@ -443,16 +453,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
   <div class="sec" style="padding-top:16px;padding-bottom:0">
     <div style="display:flex;gap:8px;align-items:stretch;">
       <button class="save-btn" id="saveBtn" style="flex:1;"><span class="save-icon">↓</span> Salva impostazioni</button>
-      <button id="themeBtnHeader" onclick="toggleThemeHeader()" style="
-        flex-shrink:0;padding:0 14px;border-radius:12px;
-        border:1px solid rgba(200,162,106,.22);
-        background:rgba(200,162,106,.05);
-        color:var(--amber);font-family:var(--fm);
-        font-size:9px;letter-spacing:.18em;
-        cursor:pointer;-webkit-appearance:none;appearance:none;
-        outline:none;min-width:120px;text-align:center;
-        transition:all .2s;height:100%;white-space:nowrap;
-      ">◑ Tema Scuro</button>
+      <button id="themeBtnHeader" class="theme-toggle-btn" onclick="toggleThemeHeader()"><span id="themeBtnIcon">◑</span><span id="themeBtnLabel">Tema Scuro</span></button>
     </div>
   </div>
 
@@ -657,7 +658,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
   </div>
   <div class="panel-scroll">
     <div class="panel-section">
-      <div class="panel-section-title">Tema</div>
+      <div class="panel-section-title" id="themePanelTitle">Tema Scuro</div>
       <div class="toggle-row">
         <div class="toggle-info">
           <div class="toggle-label">Tema Chiaro</div>
@@ -1381,8 +1382,16 @@ function toggleThemeHeader(){
   applyTheme(currentTheme==='dark'?'light':'dark');
 }
 function syncThemeBtnHeader(){
-  var btn=qs('themeBtnHeader'); if(!btn)return;
-  btn.textContent = currentTheme==='dark' ? '◑ Tema Scuro' : '◐ Tema Chiaro';
+  var icon=qs('themeBtnIcon'),lbl=qs('themeBtnLabel'),title=qs('themePanelTitle');
+  if(currentTheme==='dark'){
+    if(icon)icon.textContent='\u25d1';
+    if(lbl)lbl.textContent='Tema Scuro';
+    if(title)title.textContent='Tema Scuro';
+  } else {
+    if(icon)icon.textContent='\u25d0';
+    if(lbl)lbl.textContent='Tema Chiaro';
+    if(title)title.textContent='Tema Chiaro';
+  }
 }
 
 /* ══ TRACCIA PERSONALE — IndexedDB ══ */
