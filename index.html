@@ -335,7 +335,7 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 /* ── OVERLAY PANELS (Safari-proof) ── */
 .overlay-panel {
   position:fixed; top:0; left:0; width:100%; height:100%;
-  background:#080705; z-index:2000;
+  background:#080705; background:var(--bg); z-index:2000;
   display:flex; flex-direction:column; overflow:hidden;
   -webkit-transform:translateZ(0); transform:translateZ(0);
   -webkit-backface-visibility:hidden; backface-visibility:hidden;
@@ -964,6 +964,245 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
     <div class="stat"><span class="stat-val" id="statTrack">—</span><span class="stat-lbl">brano</span></div>
   </div>
   <button class="again-btn" id="againBtn">Nuova sessione</button>
+</div>
+
+<!-- ═══ GUIDE PANEL ═══ -->
+<div class="overlay-panel hidden" id="guidePanel">
+  <div class="panel-hdr">
+    <span class="panel-title">◎ Guida all'uso</span>
+    <button class="panel-close" id="guideClose">Chiudi</button>
+  </div>
+
+  <!-- Hero -->
+  <div class="guide-hero">
+    <div class="guide-hero-eyebrow">Respira · Guida</div>
+    <div class="guide-hero-title">Respira<br>meglio.</div>
+    <div class="guide-hero-sub">tecniche · impostazioni · catena sonora</div>
+  </div>
+
+  <!-- Scrollable body -->
+  <div class="guide-body">
+
+    <!-- ① Tecniche -->
+    <div class="guide-ch">
+      <div class="guide-ch-num">01 — Tecniche di respirazione</div>
+      <div class="guide-ch-title">Cosa ottieni con ogni tecnica</div>
+      <div class="guide-p">Ogni tecnica agisce sul sistema nervoso autonomo in modo diverso. Scegli in base all'obiettivo del momento — <strong>focus, equilibrio o rilassamento profondo.</strong></div>
+
+      <div class="guide-tech-list">
+
+        <div class="gtc amber">
+          <div class="gtc-head">
+            <span class="gtc-name">Box Breathing</span>
+            <span class="gtc-tag">FOCUS · STRESS</span>
+          </div>
+          <div class="gtc-rhythm">4 sec Inspira · 4 sec Pausa · 4 sec Espira · 4 sec Pausa</div>
+          <div class="gtc-effect">Abbassa il cortisolo in pochi minuti. Tecnica usata da atleti d'élite e forze speciali per recuperare lucidità mentale sotto pressione. Ideale prima di presentazioni, esami o momenti di tensione acuta.</div>
+        </div>
+
+        <div class="gtc sage">
+          <div class="gtc-head">
+            <span class="gtc-name">Coerenza Cardiaca</span>
+            <span class="gtc-tag">EQUILIBRIO · HRV</span>
+          </div>
+          <div class="gtc-rhythm">5 sec Inspira · 5 sec Espira · 6 cicli al minuto</div>
+          <div class="gtc-effect">Sincronizza il ritmo cardiaco con quello respiratorio (HRV biofeedback naturale). Migliora l'equilibrio del sistema nervoso autonomo nel tempo. Pratica quotidiana raccomandata: 5 min × 3 volte al giorno per effetti duraturi.</div>
+        </div>
+
+        <div class="gtc rose">
+          <div class="gtc-head">
+            <span class="gtc-name">Respirazione Lenta</span>
+            <span class="gtc-tag">RILASSAMENTO · SONNO</span>
+          </div>
+          <div class="gtc-rhythm">4 sec Inspira · 7 sec Pausa · 8 sec Espira</div>
+          <div class="gtc-effect">La tecnica 4-7-8 attiva il nervo vago e il sistema parasimpatico. L'espirazione lunga è la chiave: rallenta il battito cardiaco e predispone al sonno. Usala la sera, prima di dormire, o dopo eventi emotivamente intensi.</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ② Catena automatica -->
+    <div class="guide-ch">
+      <div class="guide-ch-num">02 — Catena di selezione automatica</div>
+      <div class="guide-ch-title">Cosa succede quando scegli una tecnica</div>
+      <div class="guide-p">Selezionando una tecnica, l'app configura automaticamente <strong>atmosfera sonora ed equalizzazione</strong> per massimizzare l'efficacia. Il Binaural rimane una scelta personale.</div>
+
+      <!-- Box Breathing -->
+      <div class="guide-chain-box">
+        <div class="guide-chain-title">◼ Box Breathing — catena automatica</div>
+        <div class="gchain-row">
+          <div class="gchain-icon">🌊</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Atmosfera suggerita</div>
+            <div class="gchain-val">Cosmo · Foresta · Pioggia</div>
+            <div class="gchain-note">Suoni freschi e ariosi · sostengono l'attenzione vigile</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+        <div class="gchain-row">
+          <div class="gchain-icon">🎚</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Equalizzazione auto</div>
+            <div class="gchain-val">Box Breathing EQ</div>
+            <div class="gchain-note">Sub tagliato −2 dB · Presenza +4 dB · favorisce la nitidezza mentale</div>
+          </div>
+        </div>
+        <div class="gchain-manual">
+          <div style="font-size:13px;flex-shrink:0;margin-top:1px;">🎧</div>
+          <div class="gchain-manual-text"><strong>Binaural consigliato: Alpha 10 Hz</strong> — onde alfa per calma vigile e concentrazione. Aggiunta manuale nelle impostazioni → Potenziamento Binaurale.</div>
+        </div>
+      </div>
+
+      <!-- Coerenza Cardiaca -->
+      <div class="guide-chain-box">
+        <div class="guide-chain-title">◉ Coerenza Cardiaca — catena automatica</div>
+        <div class="gchain-row">
+          <div class="gchain-icon">🌊</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Atmosfera suggerita</div>
+            <div class="gchain-val">Oceano · Ruscello · Vento</div>
+            <div class="gchain-note">Suoni fluidi e continui · rispecchiano il ritmo cardiaco coerente</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+        <div class="gchain-row">
+          <div class="gchain-icon">🎚</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Equalizzazione auto</div>
+            <div class="gchain-val">Coerenza Cardiaca EQ</div>
+            <div class="gchain-note">Sub +3 dB · Bass +4 dB · Presenza −1 dB · calore e corpo senza eccitazione</div>
+          </div>
+        </div>
+        <div class="gchain-manual">
+          <div style="font-size:13px;flex-shrink:0;margin-top:1px;">🎧</div>
+          <div class="gchain-manual-text"><strong>Binaural consigliato: Theta 6 Hz</strong> — onde theta per meditazione profonda e rilassamento cosciente. Aggiunta manuale nelle impostazioni.</div>
+        </div>
+      </div>
+
+      <!-- Respirazione Lenta -->
+      <div class="guide-chain-box">
+        <div class="guide-chain-title">◈ Respirazione Lenta — catena automatica</div>
+        <div class="gchain-row">
+          <div class="gchain-icon">🌊</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Atmosfera suggerita</div>
+            <div class="gchain-val">Notte · Fuoco · Profondo</div>
+            <div class="gchain-note">Suoni gravi e avvolgenti · favoriscono il distacco sensoriale</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+        <div class="gchain-row">
+          <div class="gchain-icon">🎚</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Equalizzazione auto</div>
+            <div class="gchain-val">Respirazione Lenta EQ</div>
+            <div class="gchain-note">Sub +5 dB · Mid −2 dB · Presenza −3 dB · immersione profonda, riduzione stimoli cognitivi</div>
+          </div>
+        </div>
+        <div class="gchain-manual">
+          <div style="font-size:13px;flex-shrink:0;margin-top:1px;">🎧</div>
+          <div class="gchain-manual-text"><strong>Binaural consigliato: Delta 2 Hz</strong> — onde delta per rilassamento totale e preparazione al sonno. Aggiunta manuale nelle impostazioni.</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ③ Impostazioni disponibili -->
+    <div class="guide-ch">
+      <div class="guide-ch-num">03 — Impostazioni disponibili</div>
+      <div class="guide-ch-title">Personalizza la tua sessione</div>
+      <div class="guide-p">Ogni parametro è stato pensato per migliorare l'efficacia della pratica. <strong>Non serve toccare nulla</strong> — le impostazioni di default sono già ottimizzate per ciascuna tecnica.</div>
+
+      <div class="guide-set-list">
+
+        <div class="gset">
+          <div class="gset-icon">🌬</div>
+          <div class="gset-body">
+            <div class="gset-name">Tecnica di respirazione</div>
+            <div class="gset-desc">Box · Coerenza Cardiaca · Respirazione Lenta. <strong>Ogni scelta aggiorna automaticamente</strong> atmosfera e EQ. Cambiala liberamente in base all'obiettivo del momento.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">⏱</div>
+          <div class="gset-body">
+            <div class="gset-name">Durata sessione</div>
+            <div class="gset-desc">Da 3 a 20 minuti. <strong>5 min</strong> per una pausa rapida · <strong>10–15 min</strong> per effetti profondi · <strong>20 min</strong> per meditazione strutturata.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">🎵</div>
+          <div class="gset-body">
+            <div class="gset-name">Atmosfera sonora</div>
+            <div class="gset-desc">Tracce reali a 432 Hz (Cosmo, Foresta, Oceano…) o sintetiche generate in tempo reale. Le tracce reali richiedono il primo caricamento online, poi funzionano <strong>offline</strong>.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">🎧</div>
+          <div class="gset-body">
+            <div class="gset-name">Potenziamento Binaurale</div>
+            <div class="gset-desc">Aggiunge battiti binaurali sovrapposti all'atmosfera. <strong>Richiede cuffie</strong> per funzionare. Alpha 10 Hz (focus) · Theta 6 Hz (meditazione) · Delta 2 Hz (sonno). Scelta sempre manuale.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">🔊</div>
+          <div class="gset-body">
+            <div class="gset-name">Volume</div>
+            <div class="gset-desc">Regolabile in setup e durante la sessione. Mantieni un volume <strong>medio-basso</strong>: il cervello risponde meglio ai suoni non invasivi durante la respirazione.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">🎚</div>
+          <div class="gset-body">
+            <div class="gset-name">Equalizzatore 4 bande</div>
+            <div class="gset-desc">Sub 80 Hz · Bass 250 Hz · Mid 1 kHz · Presence 4 kHz. Preset automatici per ogni tecnica, o regolazione manuale ±12 dB. <strong>Flat</strong> per riferimento neutro.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">📱</div>
+          <div class="gset-body">
+            <div class="gset-name">Modalità Cuffie / Altoparlanti</div>
+            <div class="gset-desc">Cuffie: ottimizza la risposta in frequenza per l'ascolto in cuffia. Altoparlanti: <strong>taglia le sub-basse</strong> sotto 120 Hz per ridurre la distorsione degli speaker piccoli.</div>
+          </div>
+        </div>
+
+        <div class="gset">
+          <div class="gset-icon">⚡</div>
+          <div class="gset-body">
+            <div class="gset-name">Limiter Master</div>
+            <div class="gset-desc">Comprime i picchi audio prima dell'uscita. <strong>Lascialo attivo</strong> con gli altoparlanti del telefono — evita la distorsione causata dalla sovrapposizione degli oscillatori sinusoidali.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Binaural note -->
+      <div class="guide-bino">
+        <div style="font-size:13px;flex-shrink:0;margin-top:2px;">🎧</div>
+        <div class="guide-bino-text">Il <strong>Potenziamento Binaurale</strong> è l'unica impostazione non automatica: richiedendo cuffie e una scelta personale sull'obiettivo (focus, meditazione, sonno), è sempre demandata all'utente. Le raccomandazioni sono visibili direttamente nel selettore.</div>
+      </div>
+
+    </div>
+
+    <!-- ④ Traccia personale -->
+    <div class="guide-ch">
+      <div class="guide-ch-num">04 — Traccia personale</div>
+      <div class="guide-ch-title">Porta la tua musica</div>
+      <div class="guide-p">Puoi sostituire le atmosfere integrate con <strong>qualsiasi file audio</strong> — la tua musica meditativa, registrazioni naturali, o tracce terapeutiche. Formati supportati: MP3, AAC, WAV, OGG.</div>
+
+      <div class="guide-notice">
+        <div class="guide-notice-icon">◈</div>
+        <div class="guide-notice-text"><strong>Versione non definitiva.</strong> Il caricamento di tracce personali è attualmente in fase di sviluppo. Alcune funzionalità potrebbero comportarsi in modo imprevisto a seconda del browser e del dispositivo. Il file viene salvato localmente sul dispositivo e non viene trasmesso a server esterni.</div>
+      </div>
+
+    </div>
+
+  </div><!-- /guide-body -->
 </div>
 
 <!-- ═══ SETTINGS PANEL ═══ -->
@@ -1886,6 +2125,14 @@ qs('swTheme').addEventListener('click',function(){
   btn.addEventListener('click',function(){
     applyTheme(currentTheme==='dark'?'light':'dark');
   });
+})();
+
+/* Guide panel */
+function openGuide(){ openPanel('guidePanel'); }
+function closeGuide(){ closePanel('guidePanel'); }
+(function(){
+  var btn=qs('guideBtnHeader'); if(btn) btn.addEventListener('click', openGuide);
+  var cl=qs('guideClose'); if(cl) cl.addEventListener('click', closeGuide);
 })();
 
 function openSettings(){
