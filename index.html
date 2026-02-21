@@ -11,6 +11,7 @@
 <title>Respira</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 /* ── DARK (default) ── */
 :root {
@@ -732,6 +733,109 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 :root.light .guide-notice-icon { color:#884060; }
 :root.light .guide-notice-text { color:rgba(30,26,20,0.52); }
 :root.light .guide-notice-text strong { color:rgba(30,26,20,0.72); }
+
+/* ══ HRV WATCH ══ */
+.hdr-btn.hrv-btn { border-color:rgba(74,144,226,.25); background:rgba(74,144,226,.06); color:#4A90E2; }
+.hdr-btn.hrv-btn.connected { border-color:rgba(122,200,126,.45); background:rgba(122,200,126,.10); color:#7ac87e; animation:hrv-pulse-btn 2.5s ease-in-out infinite; }
+.hdr-btn.hrv-btn.simulating { border-color:rgba(200,162,106,.35); background:rgba(200,162,106,.07); color:#c8a26a; }
+:root.light .hdr-btn.hrv-btn { border-color:rgba(74,144,226,.30); background:rgba(74,144,226,.07); color:#2a70c2; }
+@keyframes hrv-pulse-btn { 0%,100%{box-shadow:0 0 0 0 rgba(74,144,226,.0);} 50%{box-shadow:0 0 0 4px rgba(74,144,226,.15);} }
+.hrv-icon { transition:transform .3s; }
+.hdr-btn.hrv-btn.connected .hrv-icon { animation:hrv-heartbeat 1.2s ease-in-out infinite; }
+@keyframes hrv-heartbeat { 0%,100%{transform:scale(1);} 15%{transform:scale(1.35);} 30%{transform:scale(1);} 45%{transform:scale(1.18);} }
+
+/* Live bar */
+.hrv-live-bar {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:7px 24px 5px; flex-shrink:0;
+  background:linear-gradient(90deg,rgba(74,144,226,.08) 0%,rgba(74,144,226,.03) 100%);
+  border-top:1px solid rgba(74,144,226,.15); border-bottom:1px solid rgba(74,144,226,.10);
+  transition:all .4s;
+}
+.hrv-live-bar.simulating { background:linear-gradient(90deg,rgba(200,162,106,.07) 0%,rgba(200,162,106,.02) 100%); border-top-color:rgba(200,162,106,.20); border-bottom-color:rgba(200,162,106,.12); }
+.hrv-live-bar.hidden { display:none; }
+.hrv-live-inner { display:flex; align-items:center; gap:6px; flex:1; min-width:0; overflow:hidden; }
+.hrv-live-dot { width:6px; height:6px; border-radius:50%; background:#4A90E2; flex-shrink:0; animation:hrv-dot-blink 1.4s ease-in-out infinite; }
+.hrv-live-bar.simulating .hrv-live-dot { background:#c8a26a; }
+@keyframes hrv-dot-blink { 0%,100%{opacity:1;} 50%{opacity:.25;} }
+.hrv-live-bpm, .hrv-live-rmssd { font-family:'DM Mono','Courier New',monospace; font-size:10px; letter-spacing:.08em; color:#4A90E2; white-space:nowrap; }
+.hrv-live-bar.simulating .hrv-live-bpm, .hrv-live-bar.simulating .hrv-live-rmssd { color:#c8a26a; }
+.hrv-live-bpm span:first-child, .hrv-live-rmssd span:first-child { font-size:13px; font-weight:400; }
+.hrv-live-unit { font-size:8px; opacity:.65; letter-spacing:.14em; }
+.hrv-live-sep { color:rgba(240,235,226,.18); font-size:10px; }
+.hrv-coherence { font-family:'DM Mono','Courier New',monospace; font-size:8px; letter-spacing:.12em; padding:2px 7px; border-radius:10px; border:1px solid; flex-shrink:0; }
+.hrv-coherence.high { color:#7ac87e; border-color:rgba(122,200,126,.35); background:rgba(122,200,126,.08); }
+.hrv-coherence.med { color:#c8a26a; border-color:rgba(200,162,106,.35); background:rgba(200,162,106,.08); }
+.hrv-coherence.low { color:#9a8a78; border-color:rgba(154,138,120,.25); background:rgba(154,138,120,.05); }
+.hrv-disconnect-btn { background:none; border:none; color:rgba(240,235,226,.25); font-size:11px; cursor:pointer; padding:4px 6px; flex-shrink:0; transition:color .2s; }
+.hrv-disconnect-btn:active { color:rgba(240,235,226,.65); }
+
+/* Modal overlay */
+.hrv-modal-overlay {
+  position:fixed; inset:0; z-index:200;
+  background:rgba(8,7,5,.82); -webkit-backdrop-filter:blur(16px); backdrop-filter:blur(16px);
+  display:flex; align-items:flex-end; justify-content:center;
+  transition:opacity .35s cubic-bezier(.4,0,.2,1);
+}
+.hrv-modal-overlay.hidden { opacity:0; pointer-events:none; }
+.hrv-modal {
+  width:100%; max-width:520px; max-height:92dvh;
+  background:var(--bg2); border-radius:28px 28px 0 0;
+  border:1px solid var(--border); border-bottom:none;
+  display:flex; flex-direction:column; overflow:hidden;
+  box-shadow:0 -20px 60px rgba(0,0,0,.55);
+  transform:translateY(0); transition:transform .35s cubic-bezier(.4,0,.2,1);
+}
+.hrv-modal-overlay.hidden .hrv-modal { transform:translateY(60px); }
+.hrv-modal-header {
+  padding:20px 20px 16px 24px; display:flex; align-items:flex-start; justify-content:space-between;
+  border-bottom:1px solid var(--border); flex-shrink:0; position:relative;
+  background:linear-gradient(135deg,rgba(74,144,226,.07) 0%,transparent 65%);
+}
+.hrv-modal-eyebrow { font-family:'DM Mono','Courier New',monospace; font-size:8px; letter-spacing:.44em; text-transform:uppercase; color:rgba(74,144,226,.75); margin-bottom:5px; }
+.hrv-modal-title { font-size:28px; font-weight:300; letter-spacing:.06em; color:var(--text); line-height:1; }
+.hrv-modal-close { width:36px; height:36px; border-radius:50%; border:1px solid var(--border); background:var(--card); color:var(--muted); font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .2s; }
+.hrv-modal-close:active { background:rgba(200,162,106,.12); color:var(--amber); }
+.hrv-modal-body { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; padding:20px 24px 40px; display:flex; flex-direction:column; gap:14px; }
+
+/* Score row */
+.hrv-score-row { display:flex; align-items:center; gap:6px; }
+.hrv-score-card { flex:1; background:var(--card); border:1px solid var(--border); border-radius:13px; padding:12px 10px; text-align:center; }
+.hrv-score-arrow { flex:0 0 auto; font-size:18px; color:var(--muted2); background:none; border:none; padding:0 2px; }
+.hrv-score-label { font-family:'DM Mono','Courier New',monospace; font-size:7.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted2); margin-bottom:6px; }
+.hrv-score-val { font-size:20px; font-weight:300; color:var(--text); letter-spacing:.02em; }
+.hrv-score-delta-card { border-color:rgba(74,144,226,.30); background:rgba(74,144,226,.06); }
+.hrv-delta { color:#4A90E2; }
+.hrv-delta.up { color:#7ac87e; }
+.hrv-delta.down { color:#b07a8a; }
+
+/* Interpretation */
+.hrv-interp { display:flex; gap:11px; align-items:flex-start; padding:13px 14px; border-radius:13px; background:rgba(74,144,226,.05); border:1px solid rgba(74,144,226,.15); }
+.hrv-interp.high { background:rgba(122,200,126,.05); border-color:rgba(122,200,126,.20); }
+.hrv-interp.low { background:rgba(176,122,138,.05); border-color:rgba(176,122,138,.18); }
+.hrv-interp-badge { font-family:'DM Mono','Courier New',monospace; font-size:7.5px; letter-spacing:.14em; text-transform:uppercase; padding:3px 9px; border-radius:10px; border:1px solid rgba(74,144,226,.30); color:#4A90E2; background:rgba(74,144,226,.08); flex-shrink:0; margin-top:2px; }
+.hrv-interp.high .hrv-interp-badge { border-color:rgba(122,200,126,.35); color:#7ac87e; background:rgba(122,200,126,.09); }
+.hrv-interp.low .hrv-interp-badge { border-color:rgba(176,122,138,.32); color:#b07a8a; background:rgba(176,122,138,.07); }
+.hrv-interp-text { font-size:13.5px; font-weight:300; font-style:italic; line-height:1.7; color:var(--muted); flex:1; }
+
+/* Chart */
+.hrv-chart-wrap { background:var(--card); border:1px solid var(--border); border-radius:13px; padding:12px 12px 8px; }
+.hrv-chart-label { font-family:'DM Mono','Courier New',monospace; font-size:7.5px; letter-spacing:.22em; text-transform:uppercase; color:var(--muted2); margin-bottom:10px; }
+
+/* Advice */
+.hrv-advice { padding:14px 16px; background:linear-gradient(135deg,rgba(200,162,106,.06) 0%,rgba(200,162,106,.02) 100%); border:1px solid rgba(200,162,106,.18); border-radius:13px; font-size:13.5px; font-weight:300; font-style:italic; line-height:1.72; color:var(--muted); position:relative; overflow:hidden; }
+.hrv-advice::before { content:'◎'; position:absolute; right:12px; bottom:6px; font-size:36px; color:rgba(200,162,106,.07); pointer-events:none; }
+
+/* BPM summary */
+.hrv-bpm-summary { font-family:'DM Mono','Courier New',monospace; font-size:8.5px; letter-spacing:.1em; color:var(--muted2); padding:8px 12px; border-radius:9px; background:var(--card); border:1px solid var(--border); }
+
+/* Export */
+.hrv-export-row { display:flex; gap:8px; }
+.hrv-export-btn { flex:1; padding:11px 10px; border-radius:12px; border:1px solid var(--border); background:var(--card); color:var(--muted); font-family:'DM Mono','Courier New',monospace; font-size:8.5px; letter-spacing:.14em; text-transform:uppercase; cursor:pointer; transition:all .2s; -webkit-appearance:none; }
+.hrv-export-btn:active { background:rgba(74,144,226,.10); border-color:rgba(74,144,226,.30); color:#4A90E2; transform:scale(.97); }
+.hrv-export-pdf { border-color:rgba(200,162,106,.22); color:var(--amber); background:rgba(200,162,106,.04); }
+.hrv-export-pdf:active { background:rgba(200,162,106,.12); }
+.hrv-timestamp { font-family:'DM Mono','Courier New',monospace; font-size:7.5px; letter-spacing:.14em; color:var(--muted2); text-align:center; }
 </style>
 </head>
 <body>
@@ -767,6 +871,79 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <span class="hdr-btn-icon">⚙</span>
         <span class="hdr-btn-lbl">Imposta-<br>zioni</span>
       </button>
+      <button class="hdr-btn hrv-btn" id="hrvBtn" aria-label="HRV Watch">
+        <span class="hdr-btn-icon hrv-icon" id="hrvBtnIcon">♡</span>
+        <span class="hdr-btn-lbl" id="hrvBtnLabel">HRV<br>Watch</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- ═══════════ HRV LIVE BAR ═══════════ -->
+  <div id="hrvLiveBar" class="hrv-live-bar hidden">
+    <div class="hrv-live-inner">
+      <div class="hrv-live-dot" id="hrvLiveDot"></div>
+      <span class="hrv-live-bpm"><span id="hrvBpmVal">--</span> <span class="hrv-live-unit">bpm</span></span>
+      <span class="hrv-live-sep">·</span>
+      <span class="hrv-live-rmssd">RMSSD <span id="hrvRmssdVal">--</span> <span class="hrv-live-unit">ms</span></span>
+      <span class="hrv-live-sep">·</span>
+      <span class="hrv-coherence" id="hrvCoherenceChip"></span>
+    </div>
+    <button class="hrv-disconnect-btn" id="hrvDisconnectBtn" title="Disconnetti Watch">✕</button>
+  </div>
+
+  <!-- ═══════════ HRV REPORT MODAL ═══════════ -->
+  <div id="hrvModal" class="hrv-modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Report HRV">
+    <div class="hrv-modal">
+      <div class="hrv-modal-header">
+        <div class="hrv-modal-eyebrow">REPORT POST-SEDUTA</div>
+        <div class="hrv-modal-title">Analisi HRV</div>
+        <button class="hrv-modal-close" id="hrvModalClose" aria-label="Chiudi">✕</button>
+      </div>
+      <div class="hrv-modal-body">
+
+        <!-- Score cards -->
+        <div class="hrv-score-row" id="hrvScoreRow">
+          <div class="hrv-score-card">
+            <div class="hrv-score-label">Baseline</div>
+            <div class="hrv-score-val" id="rptBaseline">-- ms</div>
+          </div>
+          <div class="hrv-score-card hrv-score-arrow">→</div>
+          <div class="hrv-score-card">
+            <div class="hrv-score-label">Post</div>
+            <div class="hrv-score-val" id="rptPost">-- ms</div>
+          </div>
+          <div class="hrv-score-card hrv-score-delta-card">
+            <div class="hrv-score-label">Variazione</div>
+            <div class="hrv-score-val hrv-delta" id="rptDelta">+0%</div>
+          </div>
+        </div>
+
+        <!-- Interpretation -->
+        <div class="hrv-interp" id="hrvInterp">
+          <div class="hrv-interp-badge" id="hrvInterpBadge">—</div>
+          <div class="hrv-interp-text" id="hrvInterpText">—</div>
+        </div>
+
+        <!-- Chart -->
+        <div class="hrv-chart-wrap">
+          <div class="hrv-chart-label">HRV nel tempo (RMSSD ms)</div>
+          <canvas id="hrvChart" height="120"></canvas>
+        </div>
+
+        <!-- Advice -->
+        <div class="hrv-advice" id="hrvAdvice"></div>
+
+        <!-- BPM info -->
+        <div class="hrv-bpm-summary" id="hrvBpmSummary"></div>
+
+        <!-- Export buttons -->
+        <div class="hrv-export-row">
+          <button class="hrv-export-btn" id="hrvExportCsv">↓ Esporta CSV</button>
+          <button class="hrv-export-btn hrv-export-pdf" id="hrvExportPdf">↓ Esporta PDF</button>
+        </div>
+
+        <div class="hrv-timestamp" id="hrvTimestamp"></div>
+      </div>
     </div>
   </div>
 
@@ -1218,6 +1395,145 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
       <div class="guide-notice">
         <div class="guide-notice-icon">◈</div>
         <div class="guide-notice-text"><strong>Versione non definitiva.</strong> Il caricamento di tracce personali è attualmente in fase di sviluppo. Alcune funzionalità potrebbero comportarsi in modo imprevisto a seconda del browser e del dispositivo. Il file viene salvato localmente sul dispositivo e non viene trasmesso a server esterni.</div>
+      </div>
+
+    </div>
+
+    <!-- ⑤ HRV Watch -->
+    <div class="guide-ch">
+      <div class="guide-ch-num">05 — HRV Biofeedback con Watch</div>
+      <div class="guide-ch-title">Misura la tua<br>coerenza cardiaca</div>
+      <div class="guide-p">Il pulsante <strong>HRV Watch</strong> in alto a destra collega Respira al tuo smartwatch via Bluetooth per leggere la variabilità della frequenza cardiaca (HRV) in tempo reale. L'indice usato è il <strong>RMSSD</strong> — il più sensibile all'attivazione vagale e al rilassamento.</div>
+
+      <!-- Step-by-step -->
+      <div class="guide-chain-box">
+        <div class="guide-chain-title">◎ FLUSSO COMPLETO · PASSO PER PASSO</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">①</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Prepara il Watch</div>
+            <div class="gchain-val">Indossa il Watch · display attivo</div>
+            <div class="gchain-note">Assicurati che il sensore ottico sul retro sia a contatto con il polso. Su Apple Watch non è necessaria nessuna app aggiuntiva — il sensore HR è sempre disponibile via Bluetooth GATT.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">②</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Connetti</div>
+            <div class="gchain-val">Tap "HRV Watch" → seleziona il dispositivo</div>
+            <div class="gchain-note">Safari mostra il dialog Bluetooth. Cerca il tuo Apple Watch nell'elenco e selezionalo. La connessione richiede 5–10 secondi. Se il Watch non appare: controlla che il Bluetooth sia attivo su iPhone e che il Watch sia sbloccato.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">③</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Leggi i dati live</div>
+            <div class="gchain-val">BPM + RMSSD appaiono nella barra sotto l'header</div>
+            <div class="gchain-note">Il badge di coerenza si aggiorna ogni 2 secondi: <strong>Alta</strong> (RMSSD ≥ 40 ms) · <strong>Media</strong> (25–39 ms) · <strong>Bassa</strong> (&lt;25 ms). Aspetta 30–60 secondi prima di avviare la sessione per stabilizzare la lettura baseline.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">④</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Avvia la sessione</div>
+            <div class="gchain-val">Tap Start → i primi 60s registrano la baseline</div>
+            <div class="gchain-note">L'app salva automaticamente la media RMSSD del primo minuto come tua baseline personale. Questo valore viene confrontato con il dato post-sessione per calcolare il miglioramento. La baseline viene memorizzata per le sessioni future.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑤</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Respira seguendo il pacer</div>
+            <div class="gchain-val">Il Watch misura in continuo mentre respiri</div>
+            <div class="gchain-note">Non guardare i dati durante la sessione — affidati al pacer visivo. Il biofeedback agisce anche senza consapevolezza diretta: i dati vengono registrati automaticamente ogni 2 secondi in background.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑥</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Leggi il Report post-sessione</div>
+            <div class="gchain-val">Il modale appare automaticamente alla fine</div>
+            <div class="gchain-note">Il report mostra variazione RMSSD baseline→post, interpretazione (Alta / Media / Stabile), grafico dell'andamento HRV, consiglio personalizzato. Esporta in CSV per analisi o in PDF per stampa.</div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Interpretazione RMSSD -->
+      <div class="guide-chain-box">
+        <div class="guide-chain-title">◎ COME LEGGERE IL RMSSD</div>
+        <div class="gchain-row">
+          <div class="gchain-icon" style="color:#7ac87e;">●</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Alta coerenza · RMSSD ≥ 40 ms</div>
+            <div class="gchain-val">Sistema parasimpatico attivo</div>
+            <div class="gchain-note">Sei in uno stato di recupero e calma. Il tono vagale è alto. Ideale per Coerenza Cardiaca o Respirazione Lenta — mantieni il ritmo e i benefici si amplificano.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+        <div class="gchain-row">
+          <div class="gchain-icon" style="color:#c8a26a;">●</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Media coerenza · RMSSD 25–39 ms</div>
+            <div class="gchain-val">Sistema nervoso in equilibrio</div>
+            <div class="gchain-note">Punto di partenza comune. La respirazione guidata porta tipicamente questo range verso l'alto in 5–10 minuti di pratica continua.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+        <div class="gchain-row">
+          <div class="gchain-icon" style="color:#b07a8a;">●</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Bassa coerenza · RMSSD &lt; 25 ms</div>
+            <div class="gchain-val">Stress o stanchezza rilevati</div>
+            <div class="gchain-note">Inizia con Box Breathing per abbassare il cortisolo, poi passa a Coerenza Cardiaca. Non preoccuparti: è normale in momenti di stress — la pratica regolare sposta gradualmente il valore base verso l'alto.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Abbinamento tecnica / HRV -->
+      <div class="guide-p">Ogni tecnica si abbina in modo diverso al biofeedback HRV:</div>
+      <div class="guide-tech-list">
+        <div class="gtc sage">
+          <div class="gtc-head">
+            <span class="gtc-name">Coerenza Cardiaca 5rpm</span>
+            <span class="gtc-tag">MAX HRV</span>
+          </div>
+          <div class="gtc-rhythm">Il pattern 5·5 corrisponde alla frequenza di risonanza barorecettoriale (0.1 Hz)</div>
+          <div class="gtc-effect">È la tecnica che produce il maggiore aumento di RMSSD nella maggior parte delle persone. Se il tuo obiettivo è migliorare l'HRV, inizia da qui. Variazioni di +20–50% in una singola sessione sono documentate in letteratura.</div>
+        </div>
+        <div class="gtc amber">
+          <div class="gtc-head">
+            <span class="gtc-name">Box Breathing</span>
+            <span class="gtc-tag">STABILIZZA</span>
+          </div>
+          <div class="gtc-rhythm">Le pause uguali (4·4·4·4) bilanciano simpatico e parasimpatico</div>
+          <div class="gtc-effect">Produce un aumento moderato e stabile dell'HRV. Ottimo come punto d'ingresso quando sei in stato di stress — porta il sistema in equilibrio prima di tecniche più profonde.</div>
+        </div>
+        <div class="gtc rose">
+          <div class="gtc-head">
+            <span class="gtc-name">Respirazione Lenta</span>
+            <span class="gtc-tag">PROFONDA</span>
+          </div>
+          <div class="gtc-rhythm">L'espirazione lunga attiva direttamente il nervo vago</div>
+          <div class="gtc-effect">Massimizza l'attivazione parasimpatica serale. L'HRV tende ad aumentare soprattutto nella fase post-sessione. Usa il report per confrontare la tua baseline mattutina con quella serale.</div>
+        </div>
+      </div>
+
+      <!-- Simulazione fallback -->
+      <div class="guide-notice">
+        <div class="guide-notice-icon">◑</div>
+        <div class="guide-notice-text"><strong>Nessun Watch? Nessun problema.</strong> Se il Bluetooth non è disponibile o non hai un smartwatch compatibile, l'app attiva automaticamente una <strong>simulazione HRV fisiologica</strong>. I dati simulati seguono un modello matematico realistico — utile per familiarizzare con i report. Il pulsante mostra "HRV Sim" in ambra quando la simulazione è attiva.</div>
       </div>
 
     </div>
@@ -2217,7 +2533,512 @@ function startCustomAudioSession(onReady){
 }
 function stopCustomAudioSession(){if(!customAudio)return;var audio=customAudio,steps=10,step=0,sv=audio.volume;var fi=setInterval(function(){step++;audio.volume=Math.max(sv*(1-step/steps),0);if(step>=steps){clearInterval(fi);audio.pause();audio.currentTime=0;if(customMediaNode){try{customMediaNode.disconnect();}catch(e){}customMediaNode=null;}if(customObjectURL)buildPreviewPlayer(customObjectURL);}},80);}
 
-/* ══ INIT ══ */
+/* ═══════════════════════════════════════════════
+   HRV WATCH · Web Bluetooth + Simulation
+   ═══════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+/* ── State ── */
+var HRV = {
+  device: null, server: null, char: null,
+  connected: false, simulating: false,
+  rrBuffer: [],       // raw RR intervals (ms)
+  bpmHistory: [],     // {t, bpm}
+  rmssdHistory: [],   // {t, rmssd}
+  sessionData: [],    // {t, rmssd, bpm} during session
+  baselineData: [],   // collected in first 60s
+  baselineRmssd: null,
+  postRmssd: null,
+  simTimer: null,
+  simPhase: 0,
+  chart: null,
+  sessionActive: false,
+  sessionStartTime: null
+};
+
+var LS_KEY = 'respira_hrv_baseline_v1';
+
+/* ── Helpers ── */
+function qs(id){ return document.getElementById(id); }
+
+function calcRMSSD(rr){
+  if(!rr||rr.length<2) return null;
+  var sum=0,n=0;
+  for(var i=1;i<rr.length;i++){
+    var d=rr[i]-rr[i-1]; sum+=d*d; n++;
+  }
+  return n>0?Math.round(Math.sqrt(sum/n)):null;
+}
+
+function hrv60(rr){
+  // Keep only ~60s worth of RR intervals
+  var total=0,out=[];
+  for(var i=rr.length-1;i>=0;i--){
+    total+=rr[i];
+    out.unshift(rr[i]);
+    if(total>60000) break;
+  }
+  return out;
+}
+
+function coherenceLabel(rmssd){
+  if(!rmssd) return '';
+  if(rmssd>=40) return 'Alta';
+  if(rmssd>=25) return 'Media';
+  return 'Bassa';
+}
+
+function coherenceClass(rmssd){
+  if(!rmssd) return '';
+  if(rmssd>=40) return 'high';
+  if(rmssd>=25) return 'med';
+  return 'low';
+}
+
+/* ── UI update ── */
+function updateLiveBar(bpm, rmssd){
+  var bar=qs('hrvLiveBar');
+  if(!bar) return;
+  bar.classList.remove('hidden');
+  bar.classList.toggle('simulating', HRV.simulating && !HRV.connected);
+  qs('hrvBpmVal').textContent = bpm ? Math.round(bpm) : '--';
+  qs('hrvRmssdVal').textContent = rmssd ? Math.round(rmssd) : '--';
+  var chip=qs('hrvCoherenceChip');
+  var cls=coherenceClass(rmssd);
+  chip.className='hrv-coherence '+(cls||'');
+  chip.textContent = rmssd ? coherenceLabel(rmssd) : '';
+}
+
+function setBtnState(state){
+  // state: 'idle' | 'connected' | 'simulating'
+  var btn=qs('hrvBtn');
+  var icon=qs('hrvBtnIcon');
+  var lbl=qs('hrvBtnLabel');
+  if(!btn) return;
+  btn.classList.remove('connected','simulating');
+  if(state==='connected'){ btn.classList.add('connected'); icon.textContent='♥'; lbl.innerHTML='Watch<br>Live'; }
+  else if(state==='simulating'){ btn.classList.add('simulating'); icon.textContent='◑'; lbl.innerHTML='HRV<br>Sim'; }
+  else { icon.textContent='♡'; lbl.innerHTML='HRV<br>Watch'; }
+}
+
+/* ── Bluetooth: parse Heart Rate Measurement ── */
+function parseHRM(dataView){
+  var flags=dataView.getUint8(0);
+  var is16bit=(flags&0x01)!==0;
+  var hasRR=(flags&0x10)!==0;
+  var bpm=is16bit?dataView.getUint16(1,true):dataView.getUint8(1);
+  var rr=[];
+  if(hasRR){
+    var offset=is16bit?3:2;
+    // skip energy if present
+    if(flags&0x08) offset+=2;
+    while(offset+1<dataView.byteLength){
+      rr.push(Math.round(dataView.getUint16(offset,true)*1000/1024));
+      offset+=2;
+    }
+  }
+  return {bpm:bpm, rr:rr};
+}
+
+function onHRMNotification(evt){
+  var data=parseHRM(evt.target.value);
+  var now=Date.now();
+  // Push RR
+  data.rr.forEach(function(r){ HRV.rrBuffer.push(r); });
+  if(HRV.rrBuffer.length>300) HRV.rrBuffer.splice(0,HRV.rrBuffer.length-300);
+  var recent=hrv60(HRV.rrBuffer);
+  var rmssd=calcRMSSD(recent);
+  var bpm=data.bpm;
+  if(rmssd!==null){
+    HRV.rmssdHistory.push({t:now,rmssd:rmssd});
+    updateLiveBar(bpm,rmssd);
+    if(HRV.sessionActive){
+      HRV.sessionData.push({t:now,bpm:bpm,rmssd:rmssd});
+      // Baseline: first 60s
+      if(!HRV.baselineRmssd && now-HRV.sessionStartTime<65000){
+        HRV.baselineData.push(rmssd);
+      } else if(!HRV.baselineRmssd && HRV.baselineData.length>=3){
+        HRV.baselineRmssd=Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length);
+        saveBaselineLS(HRV.baselineRmssd);
+      }
+    }
+  }
+}
+
+/* ── Connect Bluetooth ── */
+function connectWatch(){
+  if(!navigator.bluetooth){
+    dlog&&dlog('Web Bluetooth non disponibile – simulazione attivata','warn');
+    startSimulation();
+    return;
+  }
+  navigator.bluetooth.requestDevice({
+    filters:[{services:['heart_rate']}],
+    optionalServices:['heart_rate']
+  }).then(function(device){
+    HRV.device=device;
+    device.addEventListener('gattserverdisconnected',onDisconnected);
+    return device.gatt.connect();
+  }).then(function(server){
+    HRV.server=server;
+    return server.getPrimaryService('heart_rate');
+  }).then(function(svc){
+    return svc.getCharacteristic('heart_rate_measurement');
+  }).then(function(char){
+    HRV.char=char;
+    return char.startNotifications();
+  }).then(function(){
+    HRV.connected=true;
+    HRV.simulating=false;
+    setBtnState('connected');
+    dlog&&dlog('Apple Watch connesso · HRV live','ok');
+  }).catch(function(e){
+    if(e.name==='NotFoundError'||e.message&&e.message.toLowerCase().includes('cancel')){
+      dlog&&dlog('Connessione annullata','warn');
+    } else {
+      dlog&&dlog('Bluetooth non disponibile · simulazione HRV','warn');
+      startSimulation();
+    }
+  });
+  HRV.char&&HRV.char.addEventListener('characteristicvaluechanged',onHRMNotification);
+}
+
+function onDisconnected(){
+  HRV.connected=false;
+  setBtnState('idle');
+  qs('hrvLiveBar')&&qs('hrvLiveBar').classList.add('hidden');
+  dlog&&dlog('Watch disconnesso','warn');
+}
+
+function disconnectWatch(){
+  stopSimulation();
+  if(HRV.char){ try{HRV.char.removeEventListener('characteristicvaluechanged',onHRMNotification);}catch(e){} }
+  if(HRV.server&&HRV.server.connected){ try{HRV.server.disconnect();}catch(e){} }
+  HRV.connected=false;
+  HRV.simulating=false;
+  setBtnState('idle');
+  qs('hrvLiveBar')&&qs('hrvLiveBar').classList.add('hidden');
+}
+
+/* ── Simulation (physiological model) ── */
+function startSimulation(){
+  if(HRV.simTimer) return;
+  HRV.simulating=true;
+  setBtnState('simulating');
+  dlog&&dlog('Simulazione HRV attiva (nessun Watch fisico)','ok');
+  HRV.simPhase=0;
+  var baseHR=63+Math.random()*8;
+  var baseRMSSD=28+Math.random()*12;
+  HRV.simTimer=setInterval(function(){
+    HRV.simPhase+=0.05;
+    // Gentle sine variation ~5rpm respiratory influence
+    var hr=Math.round(baseHR+5*Math.sin(HRV.simPhase*0.9)+2*Math.sin(HRV.simPhase*2.3));
+    var rmssd=Math.round(baseRMSSD+8*Math.sin(HRV.simPhase*0.7-0.5)+(Math.random()-0.5)*4);
+    rmssd=Math.max(12,Math.min(80,rmssd));
+    // Simulate RR interval
+    var rr=Math.round(60000/hr);
+    var jitter=Math.round((rmssd/30)*(Math.random()-0.5)*40);
+    HRV.rrBuffer.push(rr+jitter);
+    if(HRV.rrBuffer.length>300) HRV.rrBuffer.splice(0,1);
+    var recent=hrv60(HRV.rrBuffer);
+    var rmssdCalc=calcRMSSD(recent)||rmssd;
+    var now=Date.now();
+    HRV.rmssdHistory.push({t:now,rmssd:rmssdCalc});
+    updateLiveBar(hr,rmssdCalc);
+    if(HRV.sessionActive){
+      HRV.sessionData.push({t:now,bpm:hr,rmssd:rmssdCalc});
+      if(!HRV.baselineRmssd && now-HRV.sessionStartTime<65000){
+        HRV.baselineData.push(rmssdCalc);
+      } else if(!HRV.baselineRmssd && HRV.baselineData.length>=3){
+        HRV.baselineRmssd=Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length);
+        saveBaselineLS(HRV.baselineRmssd);
+        // Gradually improve during session (breathing effect)
+        baseRMSSD+=4;
+      }
+    }
+  },2000);
+}
+
+function stopSimulation(){
+  if(HRV.simTimer){ clearInterval(HRV.simTimer); HRV.simTimer=null; }
+  HRV.simulating=false;
+}
+
+/* ── Session hooks ── */
+function startHRVSession(){
+  HRV.sessionActive=true;
+  HRV.sessionStartTime=Date.now();
+  HRV.sessionData=[];
+  HRV.baselineData=[];
+  HRV.baselineRmssd=loadBaselineLS()||null;
+  HRV.postRmssd=null;
+}
+
+function endHRVSession(){
+  HRV.sessionActive=false;
+  if(HRV.sessionData.length>2){
+    var last=HRV.sessionData.slice(-Math.min(10,HRV.sessionData.length));
+    HRV.postRmssd=Math.round(last.reduce(function(a,b){return a+b.rmssd;},0)/last.length);
+  }
+  if((HRV.connected||HRV.simulating) && HRV.sessionData.length>1){
+    setTimeout(showHRVReport, 600);
+  }
+}
+
+/* ── Persistence ── */
+function saveBaselineLS(v){ try{localStorage.setItem(LS_KEY,String(v));}catch(e){} }
+function loadBaselineLS(){ try{var v=localStorage.getItem(LS_KEY);return v?parseInt(v,10):null;}catch(e){return null;} }
+
+/* ── Report Modal ── */
+function showHRVReport(){
+  var modal=qs('hrvModal');
+  if(!modal) return;
+
+  var baseline=HRV.baselineRmssd||loadBaselineLS();
+  var post=HRV.postRmssd;
+  if(!post||!baseline){ modal.classList.remove('hidden'); return; }
+
+  var delta=Math.round((post-baseline)/baseline*100);
+  var deltaStr=(delta>=0?'+':'')+delta+'%';
+
+  // Score cards
+  qs('rptBaseline').textContent=baseline+' ms';
+  qs('rptPost').textContent=post+' ms';
+  var deltaEl=qs('rptDelta');
+  deltaEl.textContent=deltaStr;
+  deltaEl.className='hrv-score-val hrv-delta'+(delta>0?' up':delta<0?' down':'');
+
+  // Interpretation
+  var interp=qs('hrvInterp');
+  var badge=qs('hrvInterpBadge');
+  var text=qs('hrvInterpText');
+  if(delta>=20){
+    interp.className='hrv-interp high';
+    badge.textContent='ALTA';
+    text.textContent='Eccellente risposta del sistema nervoso autonomo. La respirazione ha amplificato la variabilità cardiaca in modo significativo.';
+  } else if(delta>=5){
+    interp.className='hrv-interp';
+    badge.textContent='MEDIA';
+    text.textContent='Buona risposta. Il ritmo guidato ha favorito una migliore coerenza cardiaca e attivazione vagale.';
+  } else if(delta>=-5){
+    interp.className='hrv-interp';
+    badge.textContent='STABILE';
+    text.textContent='L\'HRV si è mantenuto stabile. Una sessione più lunga o una frequenza respiratoria più lenta potrebbe amplificare l\'effetto.';
+  } else {
+    interp.className='hrv-interp low';
+    badge.textContent='BASSA';
+    text.textContent='Variazione ridotta. Potresti aver bisogno di un ambiente più tranquillo o di praticare con maggiore regolarità.';
+  }
+
+  // Advice
+  var advice=qs('hrvAdvice');
+  var p=HRV.sessionData;
+  var avgBPM=p.length?Math.round(p.reduce(function(a,b){return a+b.bpm;},0)/p.length):0;
+  var avgRMSSD=post;
+  var advText='';
+  if(avgBPM>0){
+    var rpm=Math.round(avgBPM/10);
+    if(rpm<=6){
+      advText='Con '+avgBPM+' bpm medi, il ritmo Respirazione Lenta 6rpm è perfetto per massimizzare la risonanza. Continua così!';
+    } else if(avgBPM<=70){
+      advText='Frequenza cardiaca equilibrata. Il pattern Coerenza 5rpm potrebbe portarti ancora più benefici nelle sessioni future.';
+    } else {
+      advText='Frequenza cardiaca elevata ('+avgBPM+' bpm). Prova a iniziare con Box Breathing per portare il sistema in calma prima di passare a ritmi più lenti.';
+    }
+  }
+  if(avgRMSSD>=40) advText+=' RMSSD alto: sei in stato di alta coerenza cardiaca ♥';
+  advice.textContent=advText||'Continua la pratica quotidiana per consolidare i benefici dell\'HRV biofeedback.';
+
+  // BPM summary
+  var bpmEl=qs('hrvBpmSummary');
+  if(avgBPM>0){
+    bpmEl.textContent='Freq. cardiaca media: '+avgBPM+' bpm · Durata analisi: '+Math.round(p.length*2/60)+' min · Campioni: '+p.length;
+  } else { bpmEl.textContent=''; }
+
+  // Timestamp
+  var now=new Date();
+  qs('hrvTimestamp').textContent=now.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})+' · '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+
+  // Chart
+  buildChart(baseline, post, p);
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow='hidden';
+}
+
+function buildChart(baseline, post, sessData){
+  var canvas=qs('hrvChart');
+  if(!canvas) return;
+
+  // Destroy previous
+  if(HRV.chart){ HRV.chart.destroy(); HRV.chart=null; }
+
+  // Build chart data: baseline point + session timeline + post point
+  var labels=['Baseline'];
+  var vals=[baseline];
+  var colors=['rgba(74,144,226,0.8)'];
+
+  if(sessData&&sessData.length>0){
+    var step=Math.max(1,Math.floor(sessData.length/10));
+    var t0=sessData[0].t;
+    for(var i=0;i<sessData.length;i+=step){
+      var mins=Math.round((sessData[i].t-t0)/60000);
+      labels.push(mins+'m');
+      vals.push(Math.round(sessData[i].rmssd));
+      colors.push('rgba(74,144,226,0.5)');
+    }
+  }
+
+  labels.push('Post');
+  vals.push(post);
+  colors.push(post>baseline?'rgba(122,200,126,0.85)':'rgba(176,122,138,0.85)');
+
+  var isDark=!document.documentElement.classList.contains('light');
+  var gridColor=isDark?'rgba(255,255,255,0.06)':'rgba(0,0,0,0.07)';
+  var textColor=isDark?'rgba(240,235,226,0.35)':'rgba(30,26,20,0.40)';
+
+  HRV.chart=new Chart(canvas,{
+    type:'bar',
+    data:{
+      labels:labels,
+      datasets:[{
+        data:vals,
+        backgroundColor:colors,
+        borderRadius:6,
+        borderSkipped:false
+      }]
+    },
+    options:{
+      responsive:true,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:function(ctx){return ctx.parsed.y+' ms';}}}},
+      scales:{
+        x:{grid:{color:gridColor},ticks:{color:textColor,font:{family:'DM Mono, monospace',size:9}}},
+        y:{grid:{color:gridColor},ticks:{color:textColor,font:{family:'DM Mono, monospace',size:9}},
+           suggestedMin:0,suggestedMax:Math.max(80,(post||40)+20)}
+      }
+    }
+  });
+}
+
+/* ── CSV Export ── */
+function exportCSV(){
+  var rows=['timestamp_iso,bpm,rmssd_ms'];
+  HRV.sessionData.forEach(function(d){
+    rows.push(new Date(d.t).toISOString()+','+d.bpm+','+d.rmssd);
+  });
+  var blob=new Blob([rows.join('\n')],{type:'text/csv'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='respira-hrv-'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  setTimeout(function(){URL.revokeObjectURL(a.href);},2000);
+}
+
+/* ── PDF Export (html2canvas not available, use print trick) ── */
+function exportPDF(){
+  var modal=qs('hrvModal');
+  if(!modal) return;
+  var w=window.open('','_blank','width=600,height=800');
+  var now=new Date();
+  var baseline=HRV.baselineRmssd||'--';
+  var post=HRV.postRmssd||'--';
+  var delta=baseline&&post?Math.round((post-baseline)/baseline*100):0;
+  var html='<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Report HRV Respira</title>';
+  html+='<style>body{font-family:Georgia,serif;padding:40px;max-width:540px;margin:auto;background:#fff;color:#111;}';
+  html+='h1{font-size:28px;font-weight:300;letter-spacing:.04em;margin-bottom:4px;}';
+  html+='.sub{font-family:monospace;font-size:10px;letter-spacing:.3em;color:#888;text-transform:uppercase;margin-bottom:30px;}';
+  html+='.row{display:flex;gap:20px;margin-bottom:20px;}';
+  html+='.card{flex:1;border:1px solid #eee;border-radius:8px;padding:14px;text-align:center;}';
+  html+='.lbl{font-family:monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#999;margin-bottom:6px;}';
+  html+='.val{font-size:22px;font-weight:300;}';
+  html+='.delta{color:'+(delta>=0?'#2a8a3a':'#c0392b')+';}';
+  html+='.advice{border:1px solid #ddd;border-radius:8px;padding:16px;font-style:italic;color:#555;font-size:13px;line-height:1.7;}';
+  html+='footer{margin-top:40px;font-family:monospace;font-size:9px;color:#bbb;border-top:1px solid #eee;padding-top:14px;}';
+  html+='</style></head><body>';
+  html+='<h1>Analisi HRV</h1><div class="sub">Report post-seduta · Respira</div>';
+  html+='<div class="row">';
+  html+='<div class="card"><div class="lbl">Baseline</div><div class="val">'+baseline+' ms</div></div>';
+  html+='<div class="card"><div class="lbl">Post</div><div class="val">'+post+' ms</div></div>';
+  html+='<div class="card"><div class="lbl">Variazione</div><div class="val delta">'+(delta>=0?'+':'')+delta+'%</div></div>';
+  html+='</div>';
+  var advEl=qs('hrvAdvice');
+  html+='<div class="advice">'+(advEl?advEl.textContent:'')+'</div>';
+  html+='<footer>'+now.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'})+' · '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+'</footer>';
+  html+='</body></html>';
+  w.document.write(html);
+  w.document.close();
+  setTimeout(function(){w.print();},400);
+}
+
+/* ── Event wiring ── */
+function init(){
+  var btn=qs('hrvBtn');
+  if(!btn) return;
+
+  btn.addEventListener('click',function(){
+    if(HRV.connected||HRV.simulating){
+      disconnectWatch();
+    } else {
+      connectWatch();
+    }
+  });
+
+  var discBtn=qs('hrvDisconnectBtn');
+  if(discBtn) discBtn.addEventListener('click',disconnectWatch);
+
+  var modalClose=qs('hrvModalClose');
+  if(modalClose) modalClose.addEventListener('click',function(){
+    qs('hrvModal').classList.add('hidden');
+    document.body.style.overflow='';
+  });
+
+  // Close on overlay click
+  qs('hrvModal').addEventListener('click',function(e){
+    if(e.target===this){ this.classList.add('hidden'); document.body.style.overflow=''; }
+  });
+
+  qs('hrvExportCsv').addEventListener('click',exportCSV);
+  qs('hrvExportPdf').addEventListener('click',exportPDF);
+}
+
+/* ── Hook into session start/end ── */
+// We patch the existing startSession/stopSession if they exist
+// Otherwise we rely on MutationObserver watching #session visibility
+var _origStart=window.startSession;
+var _origStop=window.stopSession||window.endSession;
+
+// Retry wiring once DOM is ready and existing JS has run
+setTimeout(function(){
+  init();
+
+  // Watch for session screen becoming visible/hidden
+  var sessionEl=document.getElementById('session');
+  if(sessionEl){
+    var mo=new MutationObserver(function(mutations){
+      mutations.forEach(function(m){
+        if(m.type==='attributes'&&m.attributeName==='class'){
+          var hidden=sessionEl.classList.contains('hidden');
+          if(!hidden && !HRV.sessionActive){
+            startHRVSession();
+          } else if(hidden && HRV.sessionActive){
+            endHRVSession();
+          }
+        }
+      });
+    });
+    mo.observe(sessionEl,{attributes:true,attributeFilter:['class']});
+  }
+
+  // Load persisted baseline
+  var saved=loadBaselineLS();
+  if(saved) dlog&&dlog('Baseline HRV salvata: '+saved+' ms','ok');
+},200);
+
+// Expose for external calls
+window.HRV=HRV;
+
+})(); /* end HRV module */
 dlog('App inizializzata · Web Audio API v2 · EQ 4 bande · Binaural + MP3 gapless');
 loadEQ();
 var hadSaved=loadSettings();
