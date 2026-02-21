@@ -114,30 +114,31 @@ body::before {
 
 /* Bottom action bar */
 .app-header-actions {
-  display:flex; align-items:stretch; gap:7px; height:40px;
+  display:flex; align-items:stretch; gap:7px;
 }
 
 /* Shared style for all header utility buttons */
 .hdr-btn {
-  flex-shrink:0; height:44px; border-radius:12px;
+  flex:1; min-width:0; border-radius:12px;
   border:1px solid rgba(255,248,235,0.11);
   background:rgba(255,248,235,0.04);
   color:rgba(240,235,226,0.55);
   font-family:'DM Mono','Courier New',monospace;
-  font-size:9px; letter-spacing:.20em; text-transform:uppercase;
+  font-size:8.5px; letter-spacing:.16em; text-transform:uppercase;
   cursor:pointer; -webkit-appearance:none; outline:none;
-  transition:all .22s; display:flex; align-items:center; justify-content:center; gap:5px;
-  padding:0 14px; white-space:nowrap;
+  transition:all .22s; display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:2px;
+  padding:9px 10px; text-align:center; line-height:1.35; white-space:normal;
 }
 .hdr-btn:active { background:rgba(200,162,106,.11); border-color:rgba(200,162,106,.35); color:#c8a26a; transform:scale(.95); }
 :root.light .hdr-btn { border-color:rgba(30,26,20,0.13); background:rgba(30,26,20,0.04); color:rgba(30,26,20,0.50); }
 :root.light .hdr-btn:active { background:rgba(154,108,50,.10); border-color:rgba(154,108,50,.35); color:#9a6c32; }
-/* Gear icon button — square */
-.hdr-btn.icon-only { width:44px; padding:0; font-size:17px; letter-spacing:0; }
 /* Theme button keeps amber tint */
 .hdr-btn.theme { border-color:rgba(200,162,106,.22); background:rgba(200,162,106,.06); color:#c8a26a; }
 :root.light .hdr-btn.theme { border-color:rgba(154,108,50,.26); background:rgba(154,108,50,.07); color:#9a6c32; }
-
+/* Icon inside hdr-btn */
+.hdr-btn-icon { font-size:14px; line-height:1; letter-spacing:0; }
+.hdr-btn-lbl { font-size:8px; letter-spacing:.16em; line-height:1.3; }
 .sec { padding:18px 24px 0; flex-shrink:0; }
 .sec-lbl {
   font-family:'DM Mono','Courier New',monospace; font-family:var(--fm);
@@ -288,12 +289,13 @@ body::before {
 
 /* ── SAVE / VOL ── */
 .save-btn {
-  width:100%; padding:13px; border:1px solid rgba(200,162,106,.22); border-radius:12px;
+  padding:9px 12px; border:1px solid rgba(200,162,106,.22); border-radius:12px;
   background:rgba(200,162,106,.05); color:#c8a26a; color:var(--amber);
   font-family:'DM Mono','Courier New',monospace; font-family:var(--fm);
-  font-size:9px; letter-spacing:.28em; text-transform:uppercase;
+  font-size:8.5px; letter-spacing:.16em; text-transform:uppercase;
   cursor:pointer; -webkit-appearance:none; transition:all .2s;
-  display:flex; align-items:center; justify-content:center; gap:8px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+  text-align:center; line-height:1.35;
 }
 .save-btn:active { background:rgba(200,162,106,.12); transform:scale(.98); }
 .save-btn.saved { border-color:rgba(122,158,126,.35); color:#7a9e7e; color:var(--sage); background:rgba(122,158,126,.06); }
@@ -748,15 +750,23 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <span class="start-btn-arrow">›</span>
       </button>
     </div>
-    <!-- unica riga: Salva · ⚙ · Tema · Guida -->
+    <!-- riga: Salva · Tema · Guida · Impostazioni -->
     <div class="app-header-actions">
-      <button class="save-btn" id="saveBtn" style="flex:1;height:auto;"><span class="save-icon">↓</span> Salva</button>
-      <button class="hdr-btn icon-only" id="gearBtn" aria-label="Impostazioni">⚙</button>
-      <button class="hdr-btn theme" id="themeBtnHeader" aria-label="Cambia tema">
-        <span id="themeBtnIcon">◑</span>
-        <span id="themeBtnLabel">TEMA SCURO</span>
+      <button class="save-btn" id="saveBtn" style="flex:1;">
+        <span class="save-icon">↓</span>
+        <span>Salva<br>impostazioni</span>
       </button>
-      <button class="hdr-btn" id="guideBtnHeader" aria-label="Guida all'uso">Guida d'uso</button>
+      <button class="hdr-btn theme" id="themeBtnHeader" aria-label="Cambia tema">
+        <span class="hdr-btn-icon" id="themeBtnIcon">◑</span>
+        <span class="hdr-btn-lbl" id="themeBtnLabel">TEMA<br>SCURO</span>
+      </button>
+      <button class="hdr-btn" id="guideBtnHeader" aria-label="Guida all'uso">
+        <span class="hdr-btn-lbl">Guida<br>d'uso</span>
+      </button>
+      <button class="hdr-btn" id="gearBtn" aria-label="Impostazioni">
+        <span class="hdr-btn-icon">⚙</span>
+        <span class="hdr-btn-lbl">Imposta-<br>zioni</span>
+      </button>
     </div>
   </div>
 
@@ -2109,7 +2119,7 @@ function applyTheme(theme){
   /* Update header theme button */
   var tIcon=qs('themeBtnIcon'), tLbl=qs('themeBtnLabel');
   if(tIcon) tIcon.textContent = theme==='light' ? '◐' : '◑';
-  if(tLbl)  tLbl.textContent  = theme==='light' ? 'TEMA CHIARO' : 'TEMA SCURO';
+  if(tLbl)  tLbl.innerHTML  = theme==='light' ? 'TEMA<br>CHIARO' : 'TEMA<br>SCURO';
   try{localStorage.setItem(THEME_KEY,theme);}catch(e){}
 }
 (function(){
