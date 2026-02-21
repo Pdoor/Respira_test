@@ -1453,19 +1453,20 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
     <!-- ⑤ HRV Watch -->
     <div class="guide-ch">
       <div class="guide-ch-num">05 — HRV Biofeedback con Watch</div>
-      <div class="guide-ch-title">Misura la tua<br>coerenza cardiaca</div>
-      <div class="guide-p">Il pulsante <strong>HRV Watch</strong> in alto a destra collega Respira al tuo smartwatch via Bluetooth per leggere la variabilità della frequenza cardiaca (HRV) in tempo reale. L'indice usato è il <strong>RMSSD</strong> — il più sensibile all'attivazione vagale e al rilassamento.</div>
+      <div class="guide-ch-title">Due metodi per<br>dati HRV reali</div>
+      <div class="guide-p">Respira supporta due percorsi distinti per ottenere dati HRV reali. Il <strong>Metodo A</strong> usa Bluetooth diretto e misura in tempo reale durante la sessione. Il <strong>Metodo B</strong> legge i dati già salvati in Apple Salute tramite uno Shortcut iOS e li importa nel report. Scegli quello che si adatta meglio al tuo dispositivo.</div>
 
-      <!-- Step-by-step -->
+      <!-- ═══ METODO A ═══ -->
       <div class="guide-chain-box">
-        <div class="guide-chain-title">◎ FLUSSO COMPLETO · PASSO PER PASSO</div>
+        <div class="guide-chain-title">◉ METODO A · BLUETOOTH DIRETTO · TEMPO REALE</div>
+        <div class="guide-p" style="font-size:12px;margin-bottom:14px;"><strong>Requisiti:</strong> Safari iOS 16+ · HTTPS · Apple Watch indossato · Allenamento attivo sul Watch · Bluetooth iPhone abilitato per Safari.</div>
 
         <div class="gchain-row">
           <div class="gchain-icon">①</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Prepara il Watch</div>
-            <div class="gchain-val">Indossa il Watch · display attivo</div>
-            <div class="gchain-note">Assicurati che il sensore ottico sul retro sia a contatto con il polso. Su Apple Watch non è necessaria nessuna app aggiuntiva — il sensore HR è sempre disponibile via Bluetooth GATT.</div>
+            <div class="gchain-lbl">Prepara iPhone</div>
+            <div class="gchain-val">Impostazioni → Privacy → Bluetooth → Safari ON</div>
+            <div class="gchain-note">Da fare una volta sola. Safari deve avere il permesso Bluetooth esplicito. Senza questo il dialog di connessione non appare nemmeno. Verifica anche che Impostazioni → Safari → Avanzate → Funzioni sperimentali → Web Bluetooth sia abilitato.</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
@@ -1473,9 +1474,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <div class="gchain-row">
           <div class="gchain-icon">②</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Connetti</div>
-            <div class="gchain-val">Tap "HRV Watch" → seleziona il dispositivo</div>
-            <div class="gchain-note">Safari mostra il dialog Bluetooth. Cerca il tuo Apple Watch nell'elenco e selezionalo. La connessione richiede 5–10 secondi. Se il Watch non appare: controlla che il Bluetooth sia attivo su iPhone e che il Watch sia sbloccato.</div>
+            <div class="gchain-lbl">Prepara Apple Watch</div>
+            <div class="gchain-val">Apri Allenamento → Altra attività → Avvia</div>
+            <div class="gchain-note">Questo è il passaggio critico. Il Watch espone gli intervalli RR nel pacchetto Bluetooth GATT solo quando una sessione di Allenamento è attiva. Senza questo, arrivano solo i BPM e l'RMSSD non può essere calcolato. Tieni il Watch in questa schermata per tutta la sessione Respira. In alternativa tieni aperta l'app Frequenza Cardiaca sul Watch.</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
@@ -1483,9 +1484,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <div class="gchain-row">
           <div class="gchain-icon">③</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Leggi i dati live</div>
-            <div class="gchain-val">BPM + RMSSD appaiono nella barra sotto l'header</div>
-            <div class="gchain-note">Il badge di coerenza si aggiorna ogni 2 secondi: <strong>Alta</strong> (RMSSD ≥ 40 ms) · <strong>Media</strong> (25–39 ms) · <strong>Bassa</strong> (&lt;25 ms). Aspetta 30–60 secondi prima di avviare la sessione per stabilizzare la lettura baseline.</div>
+            <div class="gchain-lbl">Connetti in Respira</div>
+            <div class="gchain-val">Tap "HRV Watch" → seleziona il Watch dal dialog</div>
+            <div class="gchain-note">Il pulsante è in alto a destra accanto a Impostazioni. Safari mostra il dialog di selezione Bluetooth. Il Watch appare nell'elenco come "Apple Watch di [nome]". La connessione richiede 5–10 secondi. Se il Watch non compare: sblocca il Watch e riprova.</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
@@ -1493,9 +1494,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <div class="gchain-row">
           <div class="gchain-icon">④</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Avvia la sessione</div>
-            <div class="gchain-val">Tap Start → i primi 60s registrano la baseline</div>
-            <div class="gchain-note">L'app salva automaticamente la media RMSSD del primo minuto come tua baseline personale. Questo valore viene confrontato con il dato post-sessione per calcolare il miglioramento. La baseline viene memorizzata per le sessioni future.</div>
+            <div class="gchain-lbl">Verifica ricezione dati</div>
+            <div class="gchain-val">La barra BPM + RMSSD appare sotto l'header</div>
+            <div class="gchain-note">Il pulsante diventa ♥ verde. Nella barra vedi BPM e RMSSD aggiornati ogni ~2 secondi. Se RMSSD mostra "--" dopo 30 secondi: il Watch non sta trasmettendo gli RR (torna al passo ② e verifica che l'Allenamento sia avviato). Il debug panel mostra esattamente cosa arriva.</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
@@ -1503,9 +1504,9 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <div class="gchain-row">
           <div class="gchain-icon">⑤</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Respira seguendo il pacer</div>
-            <div class="gchain-val">Il Watch misura in continuo mentre respiri</div>
-            <div class="gchain-note">Non guardare i dati durante la sessione — affidati al pacer visivo. Il biofeedback agisce anche senza consapevolezza diretta: i dati vengono registrati automaticamente ogni 2 secondi in background.</div>
+            <div class="gchain-lbl">Aspetta la stabilizzazione</div>
+            <div class="gchain-val">60 secondi a riposo prima di Start</div>
+            <div class="gchain-note">L'app registra la baseline HRV nei <strong>primi 60 secondi della sessione</strong>, non prima. Quindi avvia la sessione, rimani fermo e non ancora in respirazione guidata per il primo minuto — l'app raccoglie il tuo RMSSD basale. Il debug mostra "baseline in raccolta · campioni=N".</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
@@ -1513,149 +1514,176 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <div class="gchain-row">
           <div class="gchain-icon">⑥</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Leggi il Report post-sessione</div>
-            <div class="gchain-val">Il modale appare automaticamente alla fine</div>
-            <div class="gchain-note">Il report mostra variazione RMSSD baseline→post, interpretazione (Alta / Media / Stabile), grafico dell'andamento HRV, consiglio personalizzato. Esporta in CSV per analisi o in PDF per stampa.</div>
+            <div class="gchain-lbl">Respira e non guardare i numeri</div>
+            <div class="gchain-val">Segui solo il pacer visivo</div>
+            <div class="gchain-note">I dati continuano ad arrivare in background ogni ~2 secondi per tutta la sessione. Fissare i numeri crea aspettative che interferiscono con la risposta parasimpatica. Affidati completamente al pacer — il report mostrerà tutto alla fine.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑦</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Report automatico</div>
+            <div class="gchain-val">Il modale appare 0.6 secondi dopo la fine sessione</div>
+            <div class="gchain-note">Mostra: RMSSD baseline vs post · ΔHRV% · badge interpretazione (Alta/Media/Stabile/Bassa) · grafico a barre dell'andamento · consiglio personalizzato su tecnica e frequenza. Esporta CSV (dati grezzi con timestamp) o PDF (report stampabile).</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ═══ METODO B ═══ -->
+      <div class="guide-chain-box" style="border-color:rgba(122,158,126,.22);background:rgba(122,158,126,.03);">
+        <div class="guide-chain-title" style="color:rgba(122,158,126,.65);">◈ METODO B · SHORTCUT iOS · DATI DA APPLE SALUTE</div>
+        <div class="guide-p" style="font-size:12px;margin-bottom:14px;">Apple Watch misura e salva HRV in Apple Salute continuamente (durante la notte, dopo l'app Mindfulness, dopo gli allenamenti). Uno Shortcut iOS legge questi valori, li formatta in JSON, li copia in clipboard e apre Respira. Funziona anche senza connessione Bluetooth attiva.</div>
+
+        <!-- Fase 1: preparazione shortcut (una volta sola) -->
+        <div class="gchain-row">
+          <div class="gchain-icon">①</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Crea lo Shortcut — una volta sola</div>
+            <div class="gchain-val">App Comandi → + → aggiungi queste 6 azioni</div>
+            <div class="gchain-note">Apri l'app Comandi su iPhone. Tocca il + in alto a destra per creare un nuovo shortcut. Poi aggiunge le azioni nell'ordine esatto indicato sotto. Dai un nome come "Respira HRV".</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">②</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azione 1 — Leggi HRV baseline</div>
+            <div class="gchain-val">Trova campioni salute → Variabilità freq. cardiaca</div>
+            <div class="gchain-note">Cerca "Trova campioni salute" nella barra azioni. Tipo: <strong>Variabilità della frequenza cardiaca</strong>. Ordina per: data, più recente. Limite: <strong>1</strong>. Tocca "Aggiungi filtro" → Data → nelle ultime → <strong>30 minuti</strong>. Assegna il risultato alla variabile <strong>hrv_pre</strong>.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">③</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azione 2 — Estrai il valore</div>
+            <div class="gchain-val">Ottieni dettagli da campione salute → Valore</div>
+            <div class="gchain-note">Cerca "Ottieni dettagli da campione salute". Input: <strong>hrv_pre</strong>. Dettaglio: <strong>Valore</strong>. Assegna alla variabile <strong>sdnn_pre</strong>. Questo è il valore SDNN in millisecondi — il tipo che Apple Watch salva in HealthKit.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">④</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azioni 3 e 4 — Ripeti per il valore post</div>
+            <div class="gchain-val">Duplica le azioni 1 e 2 → variabili hrv_post e sdnn_post</div>
+            <div class="gchain-note">Stesso identico blocco, ma il filtro data: nelle ultime <strong>5 minuti</strong> (cattura il campione più fresco registrato dopo la sessione). Assegna alle variabili <strong>hrv_post</strong> e <strong>sdnn_post</strong>. Nota: il Watch registra HRV automaticamente ogni 10–15 minuti — potrebbe servire un filtro "ultima ora" se la sessione è appena finita.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑤</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azione 5 — Costruisci il JSON</div>
+            <div class="gchain-val">Testo → scrivi questo template</div>
+            <div class="gchain-note">Aggiungi azione <strong>Testo</strong>. Nel campo testo scrivi esattamente:
+<strong>{"source":"healthkit","baseline":{"hrv_sdnn_ms":SDNN_PRE},"post":{"hrv_sdnn_ms":SDNN_POST}}</strong>
+Sostituisci SDNN_PRE e SDNN_POST con le variabili Shortcut toccando il campo e scegliendo "Inserisci variabile" → sdnn_pre / sdnn_post.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑥</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azione 6 — Copia e apri Respira</div>
+            <div class="gchain-val">Copia negli Appunti → Apri URL</div>
+            <div class="gchain-note">Aggiungi <strong>Copia negli Appunti</strong> con input il Testo dell'azione 5. Poi aggiungi <strong>Apri URL</strong> con valore: <strong>https://pdoor.github.io/Respira_test/</strong>. Salva lo Shortcut. Aggiungilo come widget alla schermata Home per accesso immediato.</div>
           </div>
         </div>
 
+        <!-- Come usarlo ogni volta -->
+        <div style="height:1px;background:rgba(122,158,126,.15);margin:16px 0;"></div>
+        <div class="guide-chain-title" style="color:rgba(122,158,126,.55);margin-bottom:12px;">◎ COME USARLO AD OGNI SESSIONE</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">A</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Prima della sessione</div>
+            <div class="gchain-val">Esegui lo Shortcut "Respira HRV" → cattura baseline</div>
+            <div class="gchain-note">Tap sul widget o sull'icona dello Shortcut. Legge il valore HRV più recente degli ultimi 30 minuti da Apple Salute — questo è il tuo <strong>baseline pre-sessione</strong>. Lo Shortcut apre Respira automaticamente. La clipboard contiene già il JSON.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">B</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Fai la sessione Respira</div>
+            <div class="gchain-val">Avvia normalmente · il Watch registra in background</div>
+            <div class="gchain-note">Apple Watch continua a misurare HRV e salvarlo in Apple Salute anche senza connessione Bluetooth a Respira. Non devi fare nulla di speciale durante la sessione — il sensore lavora in autonomia.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">C</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Dopo la sessione</div>
+            <div class="gchain-val">Aspetta 2–3 min → riesegui lo Shortcut</div>
+            <div class="gchain-note">Dai al Watch qualche minuto per registrare il campione post-sessione in Salute. Riesegui lo Shortcut: questa volta il valore "post" cattura la misura successiva alla sessione. Respira si riapre con il nuovo payload in clipboard.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">D</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Importa in Respira</div>
+            <div class="gchain-val">Appare la barra verde → tap "Importa e Analizza"</div>
+            <div class="gchain-note">Respira rileva automaticamente il payload in clipboard appena torna in primo piano. La barra verde "<strong>Dati HealthKit pronti</strong>" appare sotto l'header. Tap su "Importa e Analizza" — il report si apre con i dati reali di Apple Salute. Il badge nel report indica "⌘ HealthKit" con nota sulla conversione SDNN→RMSSD.</div>
+          </div>
+        </div>
+
+        <div class="gchain-manual" style="margin-top:16px;">
+          <div style="font-size:13px;flex-shrink:0;margin-top:1px;">⚠</div>
+          <div class="gchain-manual-text"><strong>SDNN vs RMSSD:</strong> Apple Watch salva in HealthKit il valore <strong>SDNN</strong> (deviazione standard degli RR), non l'RMSSD usato da Respira. Il bridge converte automaticamente con il fattore ×0.87 (correlazione empirica da letteratura HRV). Il report mostra entrambi i valori e indica la fonte. Per RMSSD nativo in tempo reale usa il Metodo A con Bluetooth.</div>
+        </div>
       </div>
 
       <!-- Interpretazione RMSSD -->
       <div class="guide-chain-box">
-        <div class="guide-chain-title">◎ COME LEGGERE IL RMSSD</div>
+        <div class="guide-chain-title">◎ COME LEGGERE IL REPORT</div>
         <div class="gchain-row">
           <div class="gchain-icon" style="color:#7ac87e;">●</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Alta coerenza · RMSSD ≥ 40 ms</div>
-            <div class="gchain-val">Sistema parasimpatico attivo</div>
-            <div class="gchain-note">Sei in uno stato di recupero e calma. Il tono vagale è alto. Ideale per Coerenza Cardiaca o Respirazione Lenta — mantieni il ritmo e i benefici si amplificano.</div>
+            <div class="gchain-lbl">Variazione ALTA · ΔHRV ≥ +20%</div>
+            <div class="gchain-val">Risposta parasimpatica eccellente</div>
+            <div class="gchain-note">Il sistema nervoso ha risposto in modo significativo alla respirazione guidata. Tipico della Coerenza Cardiaca praticata con costanza o della Respirazione Lenta serale.</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
         <div class="gchain-row">
           <div class="gchain-icon" style="color:#c8a26a;">●</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Media coerenza · RMSSD 25–39 ms</div>
-            <div class="gchain-val">Sistema nervoso in equilibrio</div>
-            <div class="gchain-note">Punto di partenza comune. La respirazione guidata porta tipicamente questo range verso l'alto in 5–10 minuti di pratica continua.</div>
+            <div class="gchain-lbl">Variazione MEDIA · ΔHRV +5% → +19%</div>
+            <div class="gchain-val">Risposta positiva · pratica in corso</div>
+            <div class="gchain-note">Miglioramento reale e misurabile. Con la pratica quotidiana questo range tende a spostarsi verso "Alta". Il Box Breathing produce spesso questo tipo di variazione.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+        <div class="gchain-row">
+          <div class="gchain-icon" style="color:#9a8a78;">●</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Variazione STABILE · ΔHRV -5% → +4%</div>
+            <div class="gchain-val">Nessun peggioramento · sessione efficace ugualmente</div>
+            <div class="gchain-note">L'HRV non sempre cresce in ogni singola sessione — dipende da ora del giorno, sonno, stress recente. Stabile con valori assoluti alti (RMSSD &gt;40ms) è comunque ottimo.</div>
           </div>
         </div>
         <div class="gchain-arrow">↓</div>
         <div class="gchain-row">
           <div class="gchain-icon" style="color:#b07a8a;">●</div>
           <div class="gchain-body">
-            <div class="gchain-lbl">Bassa coerenza · RMSSD &lt; 25 ms</div>
-            <div class="gchain-val">Stress o stanchezza rilevati</div>
-            <div class="gchain-note">Inizia con Box Breathing per abbassare il cortisolo, poi passa a Coerenza Cardiaca. Non preoccuparti: è normale in momenti di stress — la pratica regolare sposta gradualmente il valore base verso l'alto.</div>
+            <div class="gchain-lbl">Variazione BASSA · ΔHRV &lt; -5%</div>
+            <div class="gchain-val">Sistema in stato di stress o recupero</div>
+            <div class="gchain-note">Può succedere dopo poche ore di sonno, dopo un allenamento intenso o in periodi di stress prolungato. Non indica che la sessione è stata inutile — il respiro lento ha comunque effetti anche quando l'HRV non cresce.</div>
           </div>
-        </div>
-      </div>
-
-      <!-- Abbinamento tecnica / HRV -->
-      <div class="guide-p">Ogni tecnica si abbina in modo diverso al biofeedback HRV:</div>
-      <div class="guide-tech-list">
-        <div class="gtc sage">
-          <div class="gtc-head">
-            <span class="gtc-name">Coerenza Cardiaca 5rpm</span>
-            <span class="gtc-tag">MAX HRV</span>
-          </div>
-          <div class="gtc-rhythm">Il pattern 5·5 corrisponde alla frequenza di risonanza barorecettoriale (0.1 Hz)</div>
-          <div class="gtc-effect">È la tecnica che produce il maggiore aumento di RMSSD nella maggior parte delle persone. Se il tuo obiettivo è migliorare l'HRV, inizia da qui. Variazioni di +20–50% in una singola sessione sono documentate in letteratura.</div>
-        </div>
-        <div class="gtc amber">
-          <div class="gtc-head">
-            <span class="gtc-name">Box Breathing</span>
-            <span class="gtc-tag">STABILIZZA</span>
-          </div>
-          <div class="gtc-rhythm">Le pause uguali (4·4·4·4) bilanciano simpatico e parasimpatico</div>
-          <div class="gtc-effect">Produce un aumento moderato e stabile dell'HRV. Ottimo come punto d'ingresso quando sei in stato di stress — porta il sistema in equilibrio prima di tecniche più profonde.</div>
-        </div>
-        <div class="gtc rose">
-          <div class="gtc-head">
-            <span class="gtc-name">Respirazione Lenta</span>
-            <span class="gtc-tag">PROFONDA</span>
-          </div>
-          <div class="gtc-rhythm">L'espirazione lunga attiva direttamente il nervo vago</div>
-          <div class="gtc-effect">Massimizza l'attivazione parasimpatica serale. L'HRV tende ad aumentare soprattutto nella fase post-sessione. Usa il report per confrontare la tua baseline mattutina con quella serale.</div>
-        </div>
-      </div>
-
-      <!-- Requisiti tecnici -->
-      <div class="guide-notice">
-        <div class="guide-notice-icon">◈</div>
-        <div class="guide-notice-text"><strong>Richiede Watch fisico connesso.</strong> I dati HRV via Bluetooth vengono registrati esclusivamente da un dispositivo reale. Se il Watch non è disponibile, usa il metodo alternativo Shortcut iOS descritto sotto.</div>
-      </div>
-
-      <!-- Metodo alternativo: Shortcut iOS -->
-      <div class="guide-chain-box" style="border-color:rgba(122,158,126,.22);background:rgba(122,158,126,.03);">
-        <div class="guide-chain-title" style="color:rgba(122,158,126,.65);">◎ METODO ALTERNATIVO · SHORTCUT iOS + APPLE SALUTE</div>
-        <div class="guide-p" style="margin-bottom:12px;">Se il Bluetooth non è disponibile o preferisci usare i dati già salvati in Apple Salute, uno <strong>Shortcut iOS</strong> può estrarre i dati HRV e passarli a Respira in un tap.</div>
-
-        <div class="gchain-row">
-          <div class="gchain-icon">①</div>
-          <div class="gchain-body">
-            <div class="gchain-lbl">Crea lo Shortcut</div>
-            <div class="gchain-val">App Comandi → nuovo shortcut</div>
-            <div class="gchain-note">Aggiungi le azioni nell'ordine indicato sotto. Lo Shortcut legge HRV da Apple Salute, costruisce un JSON e lo copia in clipboard, poi apre Respira automaticamente.</div>
-          </div>
-        </div>
-        <div class="gchain-arrow">↓</div>
-
-        <div class="gchain-row">
-          <div class="gchain-icon">②</div>
-          <div class="gchain-body">
-            <div class="gchain-lbl">Azioni Shortcut — Baseline (Pre)</div>
-            <div class="gchain-val">Find Health Samples → HRV → ultimi 10 min</div>
-            <div class="gchain-note">Tipo campione: "Variabilità della frequenza cardiaca" · Ordine: dal più recente · Limite: 3 campioni. Salva in variabile "hrv_pre". Ottieni dettagli → Valore → salva in "sdnn_pre".</div>
-          </div>
-        </div>
-        <div class="gchain-arrow">↓</div>
-
-        <div class="gchain-row">
-          <div class="gchain-icon">③</div>
-          <div class="gchain-body">
-            <div class="gchain-lbl">Azioni Shortcut — Post sessione</div>
-            <div class="gchain-val">Aspetta 1 minuto → Find Health Samples → HRV</div>
-            <div class="gchain-note">Aggiungi "Aspetta" (60 secondi) dopo il blocco pre, per dar tempo al Watch di registrare. Poi ripeti Find Health Samples per il valore post. In alternativa: esegui lo Shortcut manualmente dopo la sessione.</div>
-          </div>
-        </div>
-        <div class="gchain-arrow">↓</div>
-
-        <div class="gchain-row">
-          <div class="gchain-icon">④</div>
-          <div class="gchain-body">
-            <div class="gchain-lbl">Costruisci il JSON</div>
-            <div class="gchain-val">Testo → dizionario → Copia negli Appunti</div>
-            <div class="gchain-note">Usa l'azione "Testo" con questo contenuto (sostituendo le variabili con quelle Shortcut reali):
-{"source":"healthkit","baseline":{"hrv_sdnn_ms":[sdnn_pre],"bpm_avg":[bpm_pre]},"post":{"hrv_sdnn_ms":[sdnn_post],"bpm_avg":[bpm_post]}}
-Poi "Copia negli Appunti".</div>
-          </div>
-        </div>
-        <div class="gchain-arrow">↓</div>
-
-        <div class="gchain-row">
-          <div class="gchain-icon">⑤</div>
-          <div class="gchain-body">
-            <div class="gchain-lbl">Apri Respira</div>
-            <div class="gchain-val">Apri URL → https://pdoor.github.io/Respira_test/</div>
-            <div class="gchain-note">Aggiungi l'azione "Apri URL" con l'indirizzo della PWA. Respira si apre in Safari, rileva automaticamente il payload in clipboard e mostra la barra verde "Importa e Analizza".</div>
-          </div>
-        </div>
-        <div class="gchain-arrow">↓</div>
-
-        <div class="gchain-row">
-          <div class="gchain-icon">⑥</div>
-          <div class="gchain-body">
-            <div class="gchain-lbl">Analizza</div>
-            <div class="gchain-val">Tap "Importa e Analizza" in Respira</div>
-            <div class="gchain-note">Il report si apre con i dati reali di Apple Salute: ΔHRV%, grafico, interpretazione, consiglio personalizzato. I dati vengono convertiti automaticamente da SDNN a RMSSD con fattore empirico (×0.87).</div>
-          </div>
-        </div>
-
-        <div class="gchain-manual" style="margin-top:14px;">
-          <div style="font-size:13px;flex-shrink:0;margin-top:1px;">💡</div>
-          <div class="gchain-manual-text"><strong>Formato minimo accettato:</strong> Respira accetta anche payload semplificati come <strong>{"baseline_sdnn":38,"post_sdnn":52}</strong> — utile per Shortcut rapidi o test manuali. Il campo <strong>source</strong> non è obbligatorio. Se preferisci, puoi incollare il JSON direttamente nel campo di debug dell'app e chiamare <strong>HRVShortcut.import(HRVShortcut.parse(testo))</strong> dalla console Safari.</div>
         </div>
       </div>
 
