@@ -2787,71 +2787,138 @@ function parseHRM(dataView){
     var offset=is16bit?3:2;
     if(hasEnergy) offset+=2;
     while(offset+1<dataView.byteLength){
-      // RR intervals in units of 1/1024 sec → convert to ms
       rr.push(Math.round(dataView.getUint16(offset,true)*1000/1024));
       offset+=2;
     }
   }
-  dlog&&dlog(
-    'HRV · HRM pkt · flags=0x'+flags.toString(16)+
-    ' fmt='+(is16bit?'16bit':'8bit')+
-    ' RR='+(hasRR?'sì':'no')+
-    ' energy='+(hasEnergy?'sì':'no')+
-    ' byteLen='+dataView.byteLength,
-    'ok'
-  );
-  return {bpm:bpm, rr:rr};
+  // NON logga qui — troppo frequente (1Hz). Il log avviene in onHRMNotification con logica selettiva.
+  return {bpm:bpm, rr:rr, flags:flags, is16bit:is16bit, hasRR:hasRR, hasEnergy:hasEnergy};
 }
 
-// Throttle HRM packet logs: logga un campione ogni 10 notifiche per non intasare il debug
-var _hrmLogCount=0;
+var _hrmLogCount = 0;          // totale pacchetti ricevuti
+var _rrMissingStreak = 0;      // pacchetti consecutivi senza RR
+var _lastLoggedRmssd = null;   // ultimo RMSSD loggato (per rilevare variazioni significative)
+var _lastCoherenceLevel = '';  // traccia cambio livello coerenza
+
 function onHRMNotification(evt){
-  var data=parseHRM(evt.target.value);
-  var now=Date.now();
+  var data = parseHRM(evt.target.value);
+  var now = Date.now();
   _hrmLogCount++;
 
-  // Logga ogni 10 campioni (circa ogni 8-10 secondi a 1Hz)
-  var shouldLog=(_hrmLogCount===1)||(_hrmLogCount%10===0);
-
-  // Push RR intervals nel buffer
-  if(data.rr.length===0 && shouldLog){
-    dlog&&dlog('HRV · ATTENZIONE: pacchetto HRM senza RR intervals · RMSSD non calcolabile · verifica Watch Ultra → App Watch → Frequenza Cardiaca → Intervalli RR','warn');
-  }
-  data.rr.forEach(function(r){ HRV.rrBuffer.push(r); });
-  if(HRV.rrBuffer.length>300) HRV.rrBuffer.splice(0,HRV.rrBuffer.length-300);
-
-  var recent=hrv60(HRV.rrBuffer);
-  var rmssd=calcRMSSD(recent);
-  var bpm=data.bpm;
-
-  if(shouldLog){
+  /* ── Log primo pacchetto sempre: conferma che il canale funziona ── */
+  if(_hrmLogCount === 1){
     dlog&&dlog(
-      'HRV · campione #'+_hrmLogCount+
+      'HRV · prima notifica ricevuta · BPM='+data.bpm+
+      ' · flag=0x'+data.flags.toString(16)+
+      ' · fmt='+(data.is16bit?'uint16':'uint8')+
+      ' · RR='+(data.hasRR?'sì ✓':'NO ✗ — avvia Allenamento sul Watch')+
+      ' · energy='+(data.hasEnergy?'sì':'no')+
+      ' · byteLen='+evt.target.value.byteLength,
+      data.hasRR ? 'ok' : 'warn'
+    );
+  }
+
+  /* ── Rileva assenza RR: logga solo quando la streak cambia ── */
+  if(!data.hasRR || data.rr.length === 0){
+    _rrMissingStreak++;
+    if(_rrMissingStreak === 1 || _rrMissingStreak === 5 || _rrMissingStreak === 20){
+      dlog&&dlog(
+        'HRV · RR intervals assenti · streak='+_rrMissingStreak+' pacchetti'+
+        ' · RMSSD non calcolabile · BPM='+data.bpm+
+        (_rrMissingStreak >= 5 ? ' · AZIONE: apri Allenamento sul Watch Ultra' : ''),
+        'warn'
+      );
+    }
+  } else {
+    if(_rrMissingStreak > 0){
+      dlog&&dlog('HRV · RR intervals ripristinati dopo '+_rrMissingStreak+' pacchetti assenti · BPM='+data.bpm+' · RR='+data.rr.join(',')+'ms','ok');
+    }
+    _rrMissingStreak = 0;
+  }
+
+  /* ── Accumula buffer RR ── */
+  data.rr.forEach(function(r){ HRV.rrBuffer.push(r); });
+  if(HRV.rrBuffer.length > 300) HRV.rrBuffer.splice(0, HRV.rrBuffer.length - 300);
+
+  var recent = hrv60(HRV.rrBuffer);
+  var rmssd = calcRMSSD(recent);
+  var bpm = data.bpm;
+
+  /* ── Log periodico ogni 30 pacchetti (~30s) — stato generale ── */
+  if(_hrmLogCount % 30 === 0){
+    dlog&&dlog(
+      'HRV · status #'+_hrmLogCount+
       ' · BPM='+bpm+
-      ' · RR='+data.rr.join(',')+' ms'+
-      ' · buffer='+HRV.rrBuffer.length+
-      ' · RMSSD='+(rmssd!==null?rmssd+' ms':'n/d (RR insufficienti)'),
+      ' · RR buffer='+HRV.rrBuffer.length+
+      ' · RMSSD='+(rmssd!==null ? rmssd+'ms' : 'n/d')+
+      (HRV.sessionActive ? ' · sessione attiva='+Math.round((now-HRV.sessionStartTime)/1000)+'s' : ''),
       'ok'
     );
   }
 
-  if(rmssd!==null){
-    HRV.rmssdHistory.push({t:now,rmssd:rmssd});
-    updateLiveBar(bpm,rmssd);
+  /* ── Log su variazione RMSSD significativa (±8ms) ── */
+  if(rmssd !== null && _lastLoggedRmssd !== null && Math.abs(rmssd - _lastLoggedRmssd) >= 8){
+    var direction = rmssd > _lastLoggedRmssd ? '↑' : '↓';
+    dlog&&dlog(
+      'HRV · RMSSD variazione '+direction+' '+_lastLoggedRmssd+'→'+rmssd+'ms'+
+      ' (Δ='+(rmssd-_lastLoggedRmssd>0?'+':'')+(rmssd-_lastLoggedRmssd)+'ms)',
+      rmssd > _lastLoggedRmssd ? 'ok' : 'warn'
+    );
+    _lastLoggedRmssd = rmssd;
+  } else if(rmssd !== null && _lastLoggedRmssd === null){
+    _lastLoggedRmssd = rmssd;
+    dlog&&dlog('HRV · primo RMSSD calcolato: '+rmssd+'ms · buffer='+HRV.rrBuffer.length+' campioni RR','ok');
+  }
+
+  /* ── Log cambio livello coerenza (Alta/Media/Bassa) ── */
+  if(rmssd !== null){
+    var level = rmssd >= 40 ? 'Alta' : rmssd >= 25 ? 'Media' : 'Bassa';
+    if(level !== _lastCoherenceLevel){
+      dlog&&dlog(
+        'HRV · coerenza cambiata: '+(_lastCoherenceLevel||'—')+' → '+level+
+        ' · RMSSD='+rmssd+'ms',
+        level === 'Alta' ? 'ok' : 'warn'
+      );
+      _lastCoherenceLevel = level;
+    }
+  }
+
+  /* ── Aggiorna UI ── */
+  if(rmssd !== null){
+    HRV.rmssdHistory.push({t:now, rmssd:rmssd});
+    updateLiveBar(bpm, rmssd);
+
+    /* ── Sessione attiva: raccolta baseline e dati ── */
     if(HRV.sessionActive){
-      HRV.sessionData.push({t:now,bpm:bpm,rmssd:rmssd});
-      // Baseline: accumula nei primi 60s dall'inizio sessione
-      if(!HRV.baselineRmssd && now-HRV.sessionStartTime<65000){
+      HRV.sessionData.push({t:now, bpm:bpm, rmssd:rmssd});
+
+      var elapsed = now - HRV.sessionStartTime;
+
+      if(!HRV.baselineRmssd && elapsed < 65000){
         HRV.baselineData.push(rmssd);
-        if(shouldLog) dlog&&dlog('HRV · baseline in raccolta · campioni='+HRV.baselineData.length+' · media attuale='+Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length)+' ms','ok');
-      } else if(!HRV.baselineRmssd && HRV.baselineData.length>=3){
-        HRV.baselineRmssd=Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length);
+        /* Log ogni 10 campioni baseline */
+        if(HRV.baselineData.length % 10 === 0){
+          dlog&&dlog(
+            'HRV · baseline in raccolta · '+HRV.baselineData.length+' campioni'+
+            ' · media='+Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length)+'ms'+
+            ' · tempo='+Math.round(elapsed/1000)+'s/60s',
+            'ok'
+          );
+        }
+      } else if(!HRV.baselineRmssd && HRV.baselineData.length >= 3){
+        HRV.baselineRmssd = Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length);
         saveBaselineLS(HRV.baselineRmssd);
-        dlog&&dlog('HRV · baseline fissata: '+HRV.baselineRmssd+' ms (da '+HRV.baselineData.length+' campioni)','ok');
+        dlog&&dlog(
+          'HRV · ✓ baseline fissata: '+HRV.baselineRmssd+'ms'+
+          ' · da '+HRV.baselineData.length+' campioni'+
+          ' · min='+Math.min.apply(null,HRV.baselineData)+'ms'+
+          ' · max='+Math.max.apply(null,HRV.baselineData)+'ms',
+          'ok'
+        );
       }
     }
-  } else if(shouldLog && HRV.rrBuffer.length<2){
-    dlog&&dlog('HRV · RR buffer insufficiente ('+HRV.rrBuffer.length+' campioni) · attendi qualche secondo','warn');
+  } else if(HRV.rrBuffer.length < 2 && _hrmLogCount <= 3){
+    dlog&&dlog('HRV · buffer RR insufficiente ('+HRV.rrBuffer.length+') · attendere accumulo campioni','warn');
   }
 }
 
@@ -2904,7 +2971,11 @@ function onDisconnected(){
   HRV.connected=false;
   setBtnState('idle');
   qs('hrvLiveBar')&&qs('hrvLiveBar').classList.add('hidden');
-  dlog&&dlog('Watch disconnesso','warn');
+  dlog&&dlog(
+    'HRV · Watch disconnesso inaspettatamente · campioni raccolti: '+HRV.sessionData.length+
+    (HRV.sessionActive ? ' · sessione in corso — riconnetti per continuare' : ''),
+    'warn'
+  );
 }
 
 function disconnectWatch(){
@@ -2932,23 +3003,52 @@ function startHRVSession(){
   HRV.baselineData=[];
   HRV.baselineRmssd=loadBaselineLS()||null;
   HRV.postRmssd=null;
+  /* Reset contatori per la nuova sessione */
+  _lastLoggedRmssd=null;
+  _lastCoherenceLevel='';
+  dlog&&dlog(
+    'HRV · sessione avviata · '+new Date().toLocaleTimeString('it-IT')+
+    ' · Watch='+(HRV.connected?'connesso ✓':'NON connesso — nessun dato HRV')+
+    ' · baseline salvata='+(HRV.baselineRmssd?HRV.baselineRmssd+'ms':'nessuna · verrà raccolta nei primi 60s'),
+    HRV.connected?'ok':'warn'
+  );
 }
 
 function endHRVSession(){
   HRV.sessionActive=false;
+  var duration=HRV.sessionStartTime?Math.round((Date.now()-HRV.sessionStartTime)/1000):0;
+
   if(HRV.sessionData.length>2){
     var last=HRV.sessionData.slice(-Math.min(10,HRV.sessionData.length));
     HRV.postRmssd=Math.round(last.reduce(function(a,b){return a+b.rmssd;},0)/last.length);
   }
+
   if(HRV.connected && HRV.sessionData.length>1){
-    dlog&&dlog('HRV · sessione terminata · campioni: '+HRV.sessionData.length+' · post RMSSD: '+HRV.postRmssd+' ms','ok');
+    var delta=HRV.baselineRmssd&&HRV.postRmssd?
+      Math.round((HRV.postRmssd-HRV.baselineRmssd)/HRV.baselineRmssd*100):null;
+    dlog&&dlog(
+      'HRV · sessione terminata · durata='+duration+'s'+
+      ' · campioni='+HRV.sessionData.length+
+      ' · baseline='+HRV.baselineRmssd+'ms'+
+      ' · post='+HRV.postRmssd+'ms'+
+      (delta!==null?' · ΔHRV='+(delta>=0?'+':'')+delta+'%':''),
+      'ok'
+    );
     setTimeout(showHRVReport, 600);
   } else if(!HRV.connected){
-    // Nessun Watch connesso durante la sessione — nessun report generato
-    // TODO: mostrare prompt "Connetti Watch per vedere i dati HRV"
-    dlog&&dlog('HRV · sessione senza Watch · nessun report generato · campioni disponibili: '+HRV.sessionData.length,'warn');
+    dlog&&dlog(
+      'HRV · sessione terminata senza Watch · durata='+duration+'s'+
+      ' · campioni registrati='+HRV.sessionData.length+
+      ' · nessun report generato'+
+      ' · TODO: connetti Watch e riprova',
+      'warn'
+    );
   } else {
-    dlog&&dlog('HRV · dati insufficienti per il report · campioni: '+HRV.sessionData.length,'warn');
+    dlog&&dlog(
+      'HRV · dati insufficienti per il report · campioni='+HRV.sessionData.length+
+      ' (minimo 2 richiesti) · durata='+duration+'s',
+      'warn'
+    );
   }
 }
 
