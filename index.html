@@ -734,10 +734,43 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
 :root.light .guide-notice-text { color:rgba(30,26,20,0.52); }
 :root.light .guide-notice-text strong { color:rgba(30,26,20,0.72); }
 
-/* ══ HRV WATCH ══ */
+.hrv-source-row { display:flex; align-items:center; gap:8px; }
+.hrv-source-badge { font-family:'DM Mono','Courier New',monospace; font-size:7.5px; letter-spacing:.18em; text-transform:uppercase; padding:3px 9px; border-radius:10px; border:1px solid; flex-shrink:0; }
+.hrv-source-badge.bt { color:#4A90E2; border-color:rgba(74,144,226,.30); background:rgba(74,144,226,.07); }
+.hrv-source-badge.hk { color:#7a9e7e; border-color:rgba(122,158,126,.35); background:rgba(122,158,126,.08); }
+.hrv-source-desc { font-family:'DM Mono','Courier New',monospace; font-size:8px; letter-spacing:.06em; color:var(--muted2); }
+
+/* ══ HRV SHORTCUT IMPORT BAR ══ */
+.hrv-import-bar {
+  display:flex; align-items:center; gap:8px;
+  padding:7px 16px 5px; flex-shrink:0;
+  background:linear-gradient(90deg,rgba(122,158,126,.09) 0%,rgba(122,158,126,.03) 100%);
+  border-top:1px solid rgba(122,158,126,.20); border-bottom:1px solid rgba(122,158,126,.12);
+  animation:hrv-import-pulse 2.5s ease-in-out 3;
+}
+.hrv-import-bar.hidden { display:none; }
+@keyframes hrv-import-pulse { 0%,100%{opacity:1;} 50%{opacity:.7;} }
+.hrv-import-inner { display:flex; align-items:center; gap:6px; flex:1; min-width:0; }
+.hrv-import-icon { font-size:13px; color:#7a9e7e; flex-shrink:0; }
+.hrv-import-text { font-family:'DM Mono','Courier New',monospace; font-size:8.5px; letter-spacing:.08em; color:#7a9e7e; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.hrv-import-btn {
+  flex-shrink:0; padding:5px 11px; border-radius:9px;
+  border:1px solid rgba(122,158,126,.40); background:rgba(122,158,126,.10);
+  color:#7a9e7e; font-family:'DM Mono','Courier New',monospace;
+  font-size:8px; letter-spacing:.12em; text-transform:uppercase;
+  cursor:pointer; transition:all .2s; white-space:nowrap; -webkit-appearance:none;
+}
+.hrv-import-btn:active { background:rgba(122,158,126,.22); transform:scale(.97); }
+.hrv-import-dismiss { background:none; border:none; color:rgba(240,235,226,.22); font-size:11px; cursor:pointer; padding:4px 2px; flex-shrink:0; }
+:root.light .hrv-import-bar { background:linear-gradient(90deg,rgba(74,122,80,.08) 0%,rgba(74,122,80,.02) 100%); border-top-color:rgba(74,122,80,.22); border-bottom-color:rgba(74,122,80,.14); }
+:root.light .hrv-import-icon, :root.light .hrv-import-text { color:#4a7a50; }
+:root.light .hrv-import-btn { border-color:rgba(74,122,80,.35); background:rgba(74,122,80,.08); color:#4a7a50; }
+
 .hdr-btn.hrv-btn { border-color:rgba(74,144,226,.25); background:rgba(74,144,226,.06); color:#4A90E2; }
 .hdr-btn.hrv-btn.connected { border-color:rgba(122,200,126,.45); background:rgba(122,200,126,.10); color:#7ac87e; animation:hrv-pulse-btn 2.5s ease-in-out infinite; }
+/* .hdr-btn.hrv-btn.simulating — rimosso (simulazione disabilitata, TODO: riabilitare se necessario)
 .hdr-btn.hrv-btn.simulating { border-color:rgba(200,162,106,.35); background:rgba(200,162,106,.07); color:#c8a26a; }
+*/
 :root.light .hdr-btn.hrv-btn { border-color:rgba(74,144,226,.30); background:rgba(74,144,226,.07); color:#2a70c2; }
 @keyframes hrv-pulse-btn { 0%,100%{box-shadow:0 0 0 0 rgba(74,144,226,.0);} 50%{box-shadow:0 0 0 4px rgba(74,144,226,.15);} }
 .hrv-icon { transition:transform .3s; }
@@ -752,14 +785,16 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
   border-top:1px solid rgba(74,144,226,.15); border-bottom:1px solid rgba(74,144,226,.10);
   transition:all .4s;
 }
+/* .hrv-live-bar.simulating — rimosso (simulazione disabilitata, TODO: riabilitare se necessario)
 .hrv-live-bar.simulating { background:linear-gradient(90deg,rgba(200,162,106,.07) 0%,rgba(200,162,106,.02) 100%); border-top-color:rgba(200,162,106,.20); border-bottom-color:rgba(200,162,106,.12); }
+*/
 .hrv-live-bar.hidden { display:none; }
 .hrv-live-inner { display:flex; align-items:center; gap:6px; flex:1; min-width:0; overflow:hidden; }
 .hrv-live-dot { width:6px; height:6px; border-radius:50%; background:#4A90E2; flex-shrink:0; animation:hrv-dot-blink 1.4s ease-in-out infinite; }
-.hrv-live-bar.simulating .hrv-live-dot { background:#c8a26a; }
+/* TODO simulazione: .hrv-live-bar.simulating .hrv-live-dot { background:#c8a26a; } */
 @keyframes hrv-dot-blink { 0%,100%{opacity:1;} 50%{opacity:.25;} }
 .hrv-live-bpm, .hrv-live-rmssd { font-family:'DM Mono','Courier New',monospace; font-size:10px; letter-spacing:.08em; color:#4A90E2; white-space:nowrap; }
-.hrv-live-bar.simulating .hrv-live-bpm, .hrv-live-bar.simulating .hrv-live-rmssd { color:#c8a26a; }
+/* TODO simulazione: .hrv-live-bar.simulating .hrv-live-bpm, .hrv-live-bar.simulating .hrv-live-rmssd { color:#c8a26a; } */
 .hrv-live-bpm span:first-child, .hrv-live-rmssd span:first-child { font-size:13px; font-weight:400; }
 .hrv-live-unit { font-size:8px; opacity:.65; letter-spacing:.14em; }
 .hrv-live-sep { color:rgba(240,235,226,.18); font-size:10px; }
@@ -891,6 +926,17 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
     <button class="hrv-disconnect-btn" id="hrvDisconnectBtn" title="Disconnetti Watch">✕</button>
   </div>
 
+  <!-- ═══════════ HRV SHORTCUT IMPORT BAR ═══════════ -->
+  <!-- Visibile solo quando non c'è Watch BT connesso -->
+  <div id="hrvImportBar" class="hrv-import-bar hidden">
+    <div class="hrv-import-inner">
+      <span class="hrv-import-icon">⎘</span>
+      <span class="hrv-import-text">Dati HealthKit pronti nella clipboard</span>
+    </div>
+    <button class="hrv-import-btn" id="hrvImportBtn">Importa e Analizza</button>
+    <button class="hrv-import-dismiss" id="hrvImportDismiss" title="Ignora">✕</button>
+  </div>
+
   <!-- ═══════════ HRV REPORT MODAL ═══════════ -->
   <div id="hrvModal" class="hrv-modal-overlay hidden" role="dialog" aria-modal="true" aria-label="Report HRV">
     <div class="hrv-modal">
@@ -900,6 +946,11 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         <button class="hrv-modal-close" id="hrvModalClose" aria-label="Chiudi">✕</button>
       </div>
       <div class="hrv-modal-body">
+        <!-- Sorgente dati -->
+        <div class="hrv-source-row" id="hrvSourceRow" style="display:none;">
+          <span class="hrv-source-badge" id="hrvSourceBadge"></span>
+          <span class="hrv-source-desc" id="hrvSourceDesc"></span>
+        </div>
 
         <!-- Score cards -->
         <div class="hrv-score-row" id="hrvScoreRow">
@@ -1530,10 +1581,82 @@ input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:18px; h
         </div>
       </div>
 
-      <!-- Simulazione fallback -->
+      <!-- Requisiti tecnici -->
       <div class="guide-notice">
-        <div class="guide-notice-icon">◑</div>
-        <div class="guide-notice-text"><strong>Nessun Watch? Nessun problema.</strong> Se il Bluetooth non è disponibile o non hai un smartwatch compatibile, l'app attiva automaticamente una <strong>simulazione HRV fisiologica</strong>. I dati simulati seguono un modello matematico realistico — utile per familiarizzare con i report. Il pulsante mostra "HRV Sim" in ambra quando la simulazione è attiva.</div>
+        <div class="guide-notice-icon">◈</div>
+        <div class="guide-notice-text"><strong>Richiede Watch fisico connesso.</strong> I dati HRV via Bluetooth vengono registrati esclusivamente da un dispositivo reale. Se il Watch non è disponibile, usa il metodo alternativo Shortcut iOS descritto sotto.</div>
+      </div>
+
+      <!-- Metodo alternativo: Shortcut iOS -->
+      <div class="guide-chain-box" style="border-color:rgba(122,158,126,.22);background:rgba(122,158,126,.03);">
+        <div class="guide-chain-title" style="color:rgba(122,158,126,.65);">◎ METODO ALTERNATIVO · SHORTCUT iOS + APPLE SALUTE</div>
+        <div class="guide-p" style="margin-bottom:12px;">Se il Bluetooth non è disponibile o preferisci usare i dati già salvati in Apple Salute, uno <strong>Shortcut iOS</strong> può estrarre i dati HRV e passarli a Respira in un tap.</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">①</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Crea lo Shortcut</div>
+            <div class="gchain-val">App Comandi → nuovo shortcut</div>
+            <div class="gchain-note">Aggiungi le azioni nell'ordine indicato sotto. Lo Shortcut legge HRV da Apple Salute, costruisce un JSON e lo copia in clipboard, poi apre Respira automaticamente.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">②</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azioni Shortcut — Baseline (Pre)</div>
+            <div class="gchain-val">Find Health Samples → HRV → ultimi 10 min</div>
+            <div class="gchain-note">Tipo campione: "Variabilità della frequenza cardiaca" · Ordine: dal più recente · Limite: 3 campioni. Salva in variabile "hrv_pre". Ottieni dettagli → Valore → salva in "sdnn_pre".</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">③</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Azioni Shortcut — Post sessione</div>
+            <div class="gchain-val">Aspetta 1 minuto → Find Health Samples → HRV</div>
+            <div class="gchain-note">Aggiungi "Aspetta" (60 secondi) dopo il blocco pre, per dar tempo al Watch di registrare. Poi ripeti Find Health Samples per il valore post. In alternativa: esegui lo Shortcut manualmente dopo la sessione.</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">④</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Costruisci il JSON</div>
+            <div class="gchain-val">Testo → dizionario → Copia negli Appunti</div>
+            <div class="gchain-note">Usa l'azione "Testo" con questo contenuto (sostituendo le variabili con quelle Shortcut reali):
+{"source":"healthkit","baseline":{"hrv_sdnn_ms":[sdnn_pre],"bpm_avg":[bpm_pre]},"post":{"hrv_sdnn_ms":[sdnn_post],"bpm_avg":[bpm_post]}}
+Poi "Copia negli Appunti".</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑤</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Apri Respira</div>
+            <div class="gchain-val">Apri URL → https://pdoor.github.io/Respira_test/</div>
+            <div class="gchain-note">Aggiungi l'azione "Apri URL" con l'indirizzo della PWA. Respira si apre in Safari, rileva automaticamente il payload in clipboard e mostra la barra verde "Importa e Analizza".</div>
+          </div>
+        </div>
+        <div class="gchain-arrow">↓</div>
+
+        <div class="gchain-row">
+          <div class="gchain-icon">⑥</div>
+          <div class="gchain-body">
+            <div class="gchain-lbl">Analizza</div>
+            <div class="gchain-val">Tap "Importa e Analizza" in Respira</div>
+            <div class="gchain-note">Il report si apre con i dati reali di Apple Salute: ΔHRV%, grafico, interpretazione, consiglio personalizzato. I dati vengono convertiti automaticamente da SDNN a RMSSD con fattore empirico (×0.87).</div>
+          </div>
+        </div>
+
+        <div class="gchain-manual" style="margin-top:14px;">
+          <div style="font-size:13px;flex-shrink:0;margin-top:1px;">💡</div>
+          <div class="gchain-manual-text"><strong>Formato minimo accettato:</strong> Respira accetta anche payload semplificati come <strong>{"baseline_sdnn":38,"post_sdnn":52}</strong> — utile per Shortcut rapidi o test manuali. Il campo <strong>source</strong> non è obbligatorio. Se preferisci, puoi incollare il JSON direttamente nel campo di debug dell'app e chiamare <strong>HRVShortcut.import(HRVShortcut.parse(testo))</strong> dalla console Safari.</div>
+        </div>
       </div>
 
     </div>
@@ -2542,7 +2665,9 @@ function stopCustomAudioSession(){if(!customAudio)return;var audio=customAudio,s
 /* ── State ── */
 var HRV = {
   device: null, server: null, char: null,
-  connected: false, simulating: false,
+  connected: false,
+  // simulating: rimosso — nessun dato inventato senza Watch reale
+  // TODO: quando si vorrà reintrodurre simulazione controllata, aggiungere: simulating, simTimer, simPhase
   rrBuffer: [],       // raw RR intervals (ms)
   bpmHistory: [],     // {t, bpm}
   rmssdHistory: [],   // {t, rmssd}
@@ -2550,8 +2675,6 @@ var HRV = {
   baselineData: [],   // collected in first 60s
   baselineRmssd: null,
   postRmssd: null,
-  simTimer: null,
-  simPhase: 0,
   chart: null,
   sessionActive: false,
   sessionStartTime: null
@@ -2601,7 +2724,7 @@ function updateLiveBar(bpm, rmssd){
   var bar=qs('hrvLiveBar');
   if(!bar) return;
   bar.classList.remove('hidden');
-  bar.classList.toggle('simulating', HRV.simulating && !HRV.connected);
+  bar.classList.remove('simulating'); // mai attivo senza Watch reale
   qs('hrvBpmVal').textContent = bpm ? Math.round(bpm) : '--';
   qs('hrvRmssdVal').textContent = rmssd ? Math.round(rmssd) : '--';
   var chip=qs('hrvCoherenceChip');
@@ -2611,97 +2734,142 @@ function updateLiveBar(bpm, rmssd){
 }
 
 function setBtnState(state){
-  // state: 'idle' | 'connected' | 'simulating'
+  // state: 'idle' | 'connected'
+  // 'simulating' rimosso — nessun dato inventato senza Watch reale
   var btn=qs('hrvBtn');
   var icon=qs('hrvBtnIcon');
   var lbl=qs('hrvBtnLabel');
   if(!btn) return;
   btn.classList.remove('connected','simulating');
   if(state==='connected'){ btn.classList.add('connected'); icon.textContent='♥'; lbl.innerHTML='Watch<br>Live'; }
-  else if(state==='simulating'){ btn.classList.add('simulating'); icon.textContent='◑'; lbl.innerHTML='HRV<br>Sim'; }
   else { icon.textContent='♡'; lbl.innerHTML='HRV<br>Watch'; }
 }
 
 /* ── Bluetooth: parse Heart Rate Measurement ── */
+// Spec: Bluetooth GATT Heart Rate Measurement (0x2A37)
+// Byte 0: flags — bit0=HR format (0=uint8,1=uint16), bit3=energy expended, bit4=RR intervals present
 function parseHRM(dataView){
   var flags=dataView.getUint8(0);
   var is16bit=(flags&0x01)!==0;
+  var hasEnergy=(flags&0x08)!==0;
   var hasRR=(flags&0x10)!==0;
   var bpm=is16bit?dataView.getUint16(1,true):dataView.getUint8(1);
   var rr=[];
   if(hasRR){
     var offset=is16bit?3:2;
-    // skip energy if present
-    if(flags&0x08) offset+=2;
+    if(hasEnergy) offset+=2;
     while(offset+1<dataView.byteLength){
+      // RR intervals in units of 1/1024 sec → convert to ms
       rr.push(Math.round(dataView.getUint16(offset,true)*1000/1024));
       offset+=2;
     }
   }
+  dlog&&dlog(
+    'HRV · HRM pkt · flags=0x'+flags.toString(16)+
+    ' fmt='+(is16bit?'16bit':'8bit')+
+    ' RR='+(hasRR?'sì':'no')+
+    ' energy='+(hasEnergy?'sì':'no')+
+    ' byteLen='+dataView.byteLength,
+    'ok'
+  );
   return {bpm:bpm, rr:rr};
 }
 
+// Throttle HRM packet logs: logga un campione ogni 10 notifiche per non intasare il debug
+var _hrmLogCount=0;
 function onHRMNotification(evt){
   var data=parseHRM(evt.target.value);
   var now=Date.now();
-  // Push RR
+  _hrmLogCount++;
+
+  // Logga ogni 10 campioni (circa ogni 8-10 secondi a 1Hz)
+  var shouldLog=(_hrmLogCount===1)||(_hrmLogCount%10===0);
+
+  // Push RR intervals nel buffer
+  if(data.rr.length===0 && shouldLog){
+    dlog&&dlog('HRV · ATTENZIONE: pacchetto HRM senza RR intervals · RMSSD non calcolabile · verifica Watch Ultra → App Watch → Frequenza Cardiaca → Intervalli RR','warn');
+  }
   data.rr.forEach(function(r){ HRV.rrBuffer.push(r); });
   if(HRV.rrBuffer.length>300) HRV.rrBuffer.splice(0,HRV.rrBuffer.length-300);
+
   var recent=hrv60(HRV.rrBuffer);
   var rmssd=calcRMSSD(recent);
   var bpm=data.bpm;
+
+  if(shouldLog){
+    dlog&&dlog(
+      'HRV · campione #'+_hrmLogCount+
+      ' · BPM='+bpm+
+      ' · RR='+data.rr.join(',')+' ms'+
+      ' · buffer='+HRV.rrBuffer.length+
+      ' · RMSSD='+(rmssd!==null?rmssd+' ms':'n/d (RR insufficienti)'),
+      'ok'
+    );
+  }
+
   if(rmssd!==null){
     HRV.rmssdHistory.push({t:now,rmssd:rmssd});
     updateLiveBar(bpm,rmssd);
     if(HRV.sessionActive){
       HRV.sessionData.push({t:now,bpm:bpm,rmssd:rmssd});
-      // Baseline: first 60s
+      // Baseline: accumula nei primi 60s dall'inizio sessione
       if(!HRV.baselineRmssd && now-HRV.sessionStartTime<65000){
         HRV.baselineData.push(rmssd);
+        if(shouldLog) dlog&&dlog('HRV · baseline in raccolta · campioni='+HRV.baselineData.length+' · media attuale='+Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length)+' ms','ok');
       } else if(!HRV.baselineRmssd && HRV.baselineData.length>=3){
         HRV.baselineRmssd=Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length);
         saveBaselineLS(HRV.baselineRmssd);
+        dlog&&dlog('HRV · baseline fissata: '+HRV.baselineRmssd+' ms (da '+HRV.baselineData.length+' campioni)','ok');
       }
     }
+  } else if(shouldLog && HRV.rrBuffer.length<2){
+    dlog&&dlog('HRV · RR buffer insufficiente ('+HRV.rrBuffer.length+' campioni) · attendi qualche secondo','warn');
   }
 }
 
 /* ── Connect Bluetooth ── */
 function connectWatch(){
   if(!navigator.bluetooth){
-    dlog&&dlog('Web Bluetooth non disponibile – simulazione attivata','warn');
-    startSimulation();
+    // TODO: Web Bluetooth API non presente (browser non supportato o HTTP)
+    // Quando disponibile: implementare notifica utente con istruzioni
+    dlog&&dlog('HRV · Web Bluetooth API assente (richiede Safari iOS 16+ o Chrome con HTTPS)','warn');
+    dlog&&dlog('HRV · TODO: connessione Watch non disponibile in questo contesto','warn');
     return;
   }
+  dlog&&dlog('HRV · avvio scansione dispositivi Bluetooth…','ok');
   navigator.bluetooth.requestDevice({
     filters:[{services:['heart_rate']}],
     optionalServices:['heart_rate']
   }).then(function(device){
+    dlog&&dlog('HRV · dispositivo selezionato: '+device.name,'ok');
     HRV.device=device;
     device.addEventListener('gattserverdisconnected',onDisconnected);
     return device.gatt.connect();
   }).then(function(server){
     HRV.server=server;
+    dlog&&dlog('HRV · GATT connesso · ricerca servizio heart_rate…','ok');
     return server.getPrimaryService('heart_rate');
   }).then(function(svc){
     return svc.getCharacteristic('heart_rate_measurement');
   }).then(function(char){
     HRV.char=char;
+    char.addEventListener('characteristicvaluechanged',onHRMNotification);
     return char.startNotifications();
   }).then(function(){
     HRV.connected=true;
-    HRV.simulating=false;
     setBtnState('connected');
-    dlog&&dlog('Apple Watch connesso · HRV live','ok');
+    dlog&&dlog('HRV · Apple Watch connesso · notifiche HRM attive','ok');
   }).catch(function(e){
     if(e.name==='NotFoundError'||e.message&&e.message.toLowerCase().includes('cancel')){
-      dlog&&dlog('Connessione annullata','warn');
+      dlog&&dlog('HRV · scansione annullata dall\'utente','warn');
+    } else if(e.name==='SecurityError'){
+      // TODO: mostrare toast all'utente con istruzioni permessi
+      dlog&&dlog('HRV · errore sicurezza Bluetooth · verifica permessi browser','error');
     } else {
-      dlog&&dlog('Bluetooth non disponibile · simulazione HRV','warn');
-      startSimulation();
+      // TODO: errore generico — possibile estendere con retry o UI feedback
+      dlog&&dlog('HRV · errore connessione: '+e.name+' – '+e.message,'error');
     }
   });
-  HRV.char&&HRV.char.addEventListener('characteristicvaluechanged',onHRMNotification);
 }
 
 function onDisconnected(){
@@ -2712,57 +2880,20 @@ function onDisconnected(){
 }
 
 function disconnectWatch(){
-  stopSimulation();
+  stopSimulation(); // noop stub
   if(HRV.char){ try{HRV.char.removeEventListener('characteristicvaluechanged',onHRMNotification);}catch(e){} }
   if(HRV.server&&HRV.server.connected){ try{HRV.server.disconnect();}catch(e){} }
   HRV.connected=false;
-  HRV.simulating=false;
   setBtnState('idle');
   qs('hrvLiveBar')&&qs('hrvLiveBar').classList.add('hidden');
+  dlog&&dlog('HRV · Watch disconnesso','warn');
 }
 
-/* ── Simulation (physiological model) ── */
-function startSimulation(){
-  if(HRV.simTimer) return;
-  HRV.simulating=true;
-  setBtnState('simulating');
-  dlog&&dlog('Simulazione HRV attiva (nessun Watch fisico)','ok');
-  HRV.simPhase=0;
-  var baseHR=63+Math.random()*8;
-  var baseRMSSD=28+Math.random()*12;
-  HRV.simTimer=setInterval(function(){
-    HRV.simPhase+=0.05;
-    // Gentle sine variation ~5rpm respiratory influence
-    var hr=Math.round(baseHR+5*Math.sin(HRV.simPhase*0.9)+2*Math.sin(HRV.simPhase*2.3));
-    var rmssd=Math.round(baseRMSSD+8*Math.sin(HRV.simPhase*0.7-0.5)+(Math.random()-0.5)*4);
-    rmssd=Math.max(12,Math.min(80,rmssd));
-    // Simulate RR interval
-    var rr=Math.round(60000/hr);
-    var jitter=Math.round((rmssd/30)*(Math.random()-0.5)*40);
-    HRV.rrBuffer.push(rr+jitter);
-    if(HRV.rrBuffer.length>300) HRV.rrBuffer.splice(0,1);
-    var recent=hrv60(HRV.rrBuffer);
-    var rmssdCalc=calcRMSSD(recent)||rmssd;
-    var now=Date.now();
-    HRV.rmssdHistory.push({t:now,rmssd:rmssdCalc});
-    updateLiveBar(hr,rmssdCalc);
-    if(HRV.sessionActive){
-      HRV.sessionData.push({t:now,bpm:hr,rmssd:rmssdCalc});
-      if(!HRV.baselineRmssd && now-HRV.sessionStartTime<65000){
-        HRV.baselineData.push(rmssdCalc);
-      } else if(!HRV.baselineRmssd && HRV.baselineData.length>=3){
-        HRV.baselineRmssd=Math.round(HRV.baselineData.reduce(function(a,b){return a+b;},0)/HRV.baselineData.length);
-        saveBaselineLS(HRV.baselineRmssd);
-        // Gradually improve during session (breathing effect)
-        baseRMSSD+=4;
-      }
-    }
-  },2000);
-}
-
+/* ── stopSimulation (stub mantenuto per compatibilità futura) ── */
+// TODO: se in futuro si vuole reintrodurre simulazione controllata, implementare qui
 function stopSimulation(){
-  if(HRV.simTimer){ clearInterval(HRV.simTimer); HRV.simTimer=null; }
-  HRV.simulating=false;
+  // noop — simulazione rimossa
+  dlog&&dlog('HRV · stopSimulation chiamata (simulazione non attiva)','warn');
 }
 
 /* ── Session hooks ── */
@@ -2781,8 +2912,15 @@ function endHRVSession(){
     var last=HRV.sessionData.slice(-Math.min(10,HRV.sessionData.length));
     HRV.postRmssd=Math.round(last.reduce(function(a,b){return a+b.rmssd;},0)/last.length);
   }
-  if((HRV.connected||HRV.simulating) && HRV.sessionData.length>1){
+  if(HRV.connected && HRV.sessionData.length>1){
+    dlog&&dlog('HRV · sessione terminata · campioni: '+HRV.sessionData.length+' · post RMSSD: '+HRV.postRmssd+' ms','ok');
     setTimeout(showHRVReport, 600);
+  } else if(!HRV.connected){
+    // Nessun Watch connesso durante la sessione — nessun report generato
+    // TODO: mostrare prompt "Connetti Watch per vedere i dati HRV"
+    dlog&&dlog('HRV · sessione senza Watch · nessun report generato · campioni disponibili: '+HRV.sessionData.length,'warn');
+  } else {
+    dlog&&dlog('HRV · dati insufficienti per il report · campioni: '+HRV.sessionData.length,'warn');
   }
 }
 
@@ -2977,7 +3115,7 @@ function init(){
   if(!btn) return;
 
   btn.addEventListener('click',function(){
-    if(HRV.connected||HRV.simulating){
+    if(HRV.connected){
       disconnectWatch();
     } else {
       connectWatch();
@@ -3039,6 +3177,365 @@ setTimeout(function(){
 window.HRV=HRV;
 
 })(); /* end HRV module */
+
+/* ═══════════════════════════════════════════════
+   HRV SHORTCUT BRIDGE
+   Legge dati HealthKit passati via clipboard da uno
+   Shortcut iOS → parsa → alimenta lo stesso report engine
+   ═══════════════════════════════════════════════
+
+   FORMATO JSON atteso dalla clipboard (prodotto dallo Shortcut):
+   {
+     "source": "healthkit",
+     "version": 1,
+     "exportedAt": "2025-02-21T14:30:00Z",
+     "sessionStart": "2025-02-21T14:00:00Z",   // opzionale
+     "sessionEnd":   "2025-02-21T14:20:00Z",   // opzionale
+     "baseline": {                              // campioni PRE sessione
+       "hrv_sdnn_ms": 38,                       // SDNN da HealthKit (ms)
+       "hrv_rmssd_ms": 34,                      // RMSSD se disponibile
+       "bpm_avg": 64,
+       "samples": [                             // array campioni grezzi opzionale
+         {"timestamp":"…","sdnn":36,"bpm":65},
+         …
+       ]
+     },
+     "post": {                                  // campioni POST sessione
+       "hrv_sdnn_ms": 52,
+       "hrv_rmssd_ms": 48,
+       "bpm_avg": 60,
+       "samples": []
+     }
+   }
+
+   NOTE:
+   - HealthKit espone SDNN nativo (HKQuantityTypeIdentifierHeartRateVariabilitySDNN)
+   - RMSSD non è un tipo HealthKit diretto — viene calcolato dall'app Breathe/Mindfulness
+     e salvato come campione separato. Se assente, usiamo SDNN come proxy (correlazione ~0.85)
+   - Lo Shortcut può passare solo SDNN: il bridge usa la conversione empirica RMSSD ≈ SDNN × 0.88
+   ═══════════════════════════════════════════════ */
+(function(){
+'use strict';
+
+var IMPORT_LS_KEY = 'respira_hk_last_import_v1';
+var _pendingPayload = null;
+
+/* ── Controlla clipboard all'avvio e quando l'app torna in focus ── */
+function checkClipboardOnFocus(){
+  if(!navigator.clipboard || !navigator.clipboard.readText) return;
+  // Legge silenziosamente solo se la pagina è in focus (richiesto da browser)
+  navigator.clipboard.readText().then(function(text){
+    if(!text || text.length < 20) return;
+    var parsed = tryParseHKPayload(text);
+    if(parsed){
+      _pendingPayload = parsed;
+      showImportBar();
+      dlog&&dlog('HRV · Shortcut · payload HealthKit rilevato in clipboard ('+
+        'baseline='+(parsed.baseline.rmssd||parsed.baseline.sdnn)+'ms · '+
+        'post='+(parsed.post.rmssd||parsed.post.sdnn)+'ms)','ok');
+    }
+  }).catch(function(e){
+    // Clipboard read può fallire per permessi — silenzioso, non è un errore critico
+    dlog&&dlog('HRV · Shortcut · clipboard non leggibile ('+e.name+') — usa il pulsante manuale','warn');
+  });
+}
+
+/* ── Parser robusto: accetta varianti di struttura dallo Shortcut ── */
+function tryParseHKPayload(text){
+  text = text.trim();
+  // Deve iniziare con { e contenere "healthkit" o "source"
+  if(text[0] !== '{') return null;
+  var obj;
+  try { obj = JSON.parse(text); } catch(e){ return null; }
+  if(!obj || typeof obj !== 'object') return null;
+
+  // Accetta sia formato strutturato che semplificato
+  // Formato semplificato: {"baseline_sdnn":38,"post_sdnn":52,"bpm_pre":64,"bpm_post":60}
+  var isSimple = ('baseline_sdnn' in obj || 'pre_sdnn' in obj || 'pre_hrv' in obj);
+  var isStructured = (obj.source === 'healthkit' && obj.baseline && obj.post);
+
+  if(!isSimple && !isStructured) return null;
+
+  var baseline, post;
+
+  if(isStructured){
+    baseline = normalizeHKSample(obj.baseline);
+    post      = normalizeHKSample(obj.post);
+  } else {
+    // Formato flat — compatibilità massima con Shortcut basilari
+    var bSdnn = obj.baseline_sdnn || obj.pre_sdnn || obj.pre_hrv || obj.hrv_before || 0;
+    var pSdnn = obj.post_sdnn     || obj.post_hrv || obj.hrv_after  || 0;
+    baseline = { sdnn: bSdnn, rmssd: obj.baseline_rmssd||obj.pre_rmssd||null, bpm: obj.bpm_pre||obj.pre_bpm||0 };
+    post     = { sdnn: pSdnn, rmssd: obj.post_rmssd||null,                    bpm: obj.bpm_post||obj.post_bpm||0 };
+  }
+
+  if(!baseline.sdnn && !baseline.rmssd) return null;
+  if(!post.sdnn && !post.rmssd) return null;
+
+  // RMSSD proxy: se HealthKit ha solo SDNN, converti con fattore empirico
+  // (da letteratura: RMSSD ≈ SDNN × 0.87 in soggetti a riposo)
+  if(!baseline.rmssd && baseline.sdnn) baseline.rmssd = Math.round(baseline.sdnn * 0.87);
+  if(!post.rmssd && post.sdnn)         post.rmssd     = Math.round(post.sdnn * 0.87);
+
+  return {
+    source:      obj.source || 'healthkit',
+    exportedAt:  obj.exportedAt || new Date().toISOString(),
+    sessionStart:obj.sessionStart || null,
+    sessionEnd:  obj.sessionEnd || null,
+    baseline: baseline,
+    post: post,
+    raw: obj
+  };
+}
+
+function normalizeHKSample(s){
+  if(!s) return {sdnn:0, rmssd:null, bpm:0};
+  return {
+    sdnn:  s.hrv_sdnn_ms  || s.sdnn  || s.hrv  || 0,
+    rmssd: s.hrv_rmssd_ms || s.rmssd || null,
+    bpm:   s.bpm_avg      || s.bpm   || 0,
+    samples: s.samples || []
+  };
+}
+
+/* ── Import Bar UI ── */
+function showImportBar(){
+  var bar = document.getElementById('hrvImportBar');
+  if(bar) bar.classList.remove('hidden');
+}
+function hideImportBar(){
+  var bar = document.getElementById('hrvImportBar');
+  if(bar) bar.classList.add('hidden');
+}
+
+/* ── Genera report da payload HealthKit ── */
+function buildReportFromHK(payload){
+  if(!payload) return;
+
+  var baseline = payload.baseline.rmssd;
+  var post     = payload.post.rmssd;
+  var bpmPre   = payload.baseline.bpm;
+  var bpmPost  = payload.post.bpm;
+
+  dlog&&dlog('HRV · Shortcut · import HealthKit: baseline='+baseline+'ms post='+post+'ms bpm='+bpmPre+'→'+bpmPost,'ok');
+
+  // Salva baseline in localStorage per sessioni future BT
+  if(baseline) {
+    try{ localStorage.setItem('respira_hrv_baseline_v1', String(baseline)); }catch(e){}
+    dlog&&dlog('HRV · Shortcut · baseline salvata in localStorage ('+baseline+'ms)','ok');
+  }
+
+  // Salva import per riferimento futuro
+  try{ localStorage.setItem(IMPORT_LS_KEY, JSON.stringify({t:Date.now(), payload:payload})); }catch(e){}
+
+  // Popola il report modal usando lo stesso engine del BT
+  var modal = document.getElementById('hrvModal');
+  if(!modal) return;
+
+  var delta = Math.round((post - baseline) / baseline * 100);
+  var deltaStr = (delta >= 0 ? '+' : '') + delta + '%';
+
+  // Score cards
+  var elBase = document.getElementById('rptBaseline');
+  var elPost = document.getElementById('rptPost');
+  var elDelta = document.getElementById('rptDelta');
+  if(elBase)  elBase.textContent  = baseline + ' ms';
+  if(elPost)  elPost.textContent  = post + ' ms';
+  if(elDelta){
+    elDelta.textContent = deltaStr;
+    elDelta.className = 'hrv-score-val hrv-delta' + (delta > 0 ? ' up' : delta < 0 ? ' down' : '');
+  }
+
+  // Source badge
+  var srcRow  = document.getElementById('hrvSourceRow');
+  var srcBadge= document.getElementById('hrvSourceBadge');
+  var srcDesc = document.getElementById('hrvSourceDesc');
+  if(srcRow)  srcRow.style.display = 'flex';
+  if(srcBadge){ srcBadge.textContent = '⌘ HealthKit'; srcBadge.className = 'hrv-source-badge hk'; }
+  if(srcDesc){
+    var sdnnNote = payload.baseline.sdnn ?
+      ' · SDNN→RMSSD conversione empirica ×0.87' : ' · RMSSD nativo';
+    srcDesc.textContent = 'Dati da Apple Salute via Shortcut' + sdnnNote;
+  }
+
+  // Interpretation
+  var interp = document.getElementById('hrvInterp');
+  var badge  = document.getElementById('hrvInterpBadge');
+  var itext  = document.getElementById('hrvInterpText');
+  if(interp && badge && itext){
+    if(delta >= 20){
+      interp.className = 'hrv-interp high'; badge.textContent = 'ALTA';
+      itext.textContent = 'Eccellente risposta del sistema nervoso autonomo. La respirazione ha amplificato la variabilità cardiaca in modo significativo.';
+    } else if(delta >= 5){
+      interp.className = 'hrv-interp'; badge.textContent = 'MEDIA';
+      itext.textContent = 'Buona risposta. Il ritmo guidato ha favorito una migliore coerenza cardiaca e attivazione vagale.';
+    } else if(delta >= -5){
+      interp.className = 'hrv-interp'; badge.textContent = 'STABILE';
+      itext.textContent = 'L\'HRV si è mantenuto stabile. Una sessione più lunga o un ritmo più lento potrebbe amplificare l\'effetto.';
+    } else {
+      interp.className = 'hrv-interp low'; badge.textContent = 'BASSA';
+      itext.textContent = 'Variazione ridotta. Prova in un ambiente più tranquillo o con pratica più regolare.';
+    }
+  }
+
+  // Advice
+  var advEl = document.getElementById('hrvAdvice');
+  if(advEl){
+    var avgBPM = bpmPost || bpmPre || 0;
+    var txt = '';
+    if(avgBPM > 0){
+      if(avgBPM <= 62) txt = 'Frequenza cardiaca bassa ('+avgBPM+' bpm post-sessione): ottima risposta parasimpatica. Il pattern Coerenza 5rpm sta funzionando.';
+      else if(avgBPM <= 70) txt = 'BPM equilibrati ('+avgBPM+'). Il pattern Coerenza 5rpm è il più efficace per il tuo range cardiaco.';
+      else txt = 'Frequenza ancora elevata ('+avgBPM+' bpm). Prova sessioni più lunghe o inizia con Box Breathing per portare il sistema in calma.';
+    }
+    if(post >= 40) txt += (txt?' ':'') + 'RMSSD post ≥ 40ms: alta coerenza cardiaca raggiunta ♥';
+    advEl.textContent = txt || 'Continua la pratica quotidiana per consolidare i benefici.';
+  }
+
+  // BPM summary
+  var bpmEl = document.getElementById('hrvBpmSummary');
+  if(bpmEl){
+    var parts = [];
+    if(bpmPre)  parts.push('BPM pre-sessione: '+bpmPre);
+    if(bpmPost) parts.push('BPM post-sessione: '+bpmPost);
+    if(payload.baseline.sdnn) parts.push('SDNN baseline: '+payload.baseline.sdnn+'ms (HealthKit nativo)');
+    bpmEl.textContent = parts.join(' · ');
+  }
+
+  // Timestamp
+  var tsEl = document.getElementById('hrvTimestamp');
+  if(tsEl){
+    var d = payload.exportedAt ? new Date(payload.exportedAt) : new Date();
+    tsEl.textContent = d.toLocaleDateString('it-IT',{day:'2-digit',month:'long',year:'numeric'}) +
+      ' · ' + d.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}) +
+      ' · sorgente: Apple Salute (Shortcut)';
+  }
+
+  // Chart — usa punti baseline e post, più campioni intermedi se disponibili
+  buildHKChart(payload);
+
+  modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  hideImportBar();
+}
+
+function buildHKChart(payload){
+  var canvas = document.getElementById('hrvChart');
+  if(!canvas || typeof Chart === 'undefined') return;
+  if(window.HRV && window.HRV.chart){ window.HRV.chart.destroy(); window.HRV.chart = null; }
+
+  var labels = ['Baseline'];
+  var vals   = [payload.baseline.rmssd];
+  var colors = ['rgba(74,144,226,0.75)'];
+
+  // Campioni intermedi (da sessione HealthKit se disponibili nello Shortcut)
+  var allSamples = (payload.baseline.samples||[]).concat(payload.post.samples||[]);
+  if(allSamples.length > 0){
+    allSamples.forEach(function(s, i){
+      if(s.rmssd || s.sdnn){
+        var v = s.rmssd || Math.round((s.sdnn||0)*0.87);
+        labels.push('+'+(i+1)+'m');
+        vals.push(v);
+        colors.push('rgba(74,144,226,0.45)');
+      }
+    });
+  }
+
+  var postRmssd = payload.post.rmssd;
+  labels.push('Post');
+  vals.push(postRmssd);
+  colors.push(postRmssd > payload.baseline.rmssd ? 'rgba(122,200,126,0.85)' : 'rgba(176,122,138,0.85)');
+
+  var isDark = !document.documentElement.classList.contains('light');
+  var gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.07)';
+  var textColor = isDark ? 'rgba(240,235,226,0.35)' : 'rgba(30,26,20,0.40)';
+
+  var chart = new Chart(canvas, {
+    type: 'bar',
+    data:{
+      labels: labels,
+      datasets:[{
+        data: vals,
+        backgroundColor: colors,
+        borderRadius: 6,
+        borderSkipped: false
+      }]
+    },
+    options:{
+      responsive: true,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:function(ctx){return ctx.parsed.y+' ms';}}}},
+      scales:{
+        x:{ grid:{color:gridColor}, ticks:{color:textColor,font:{family:'DM Mono, monospace',size:9}} },
+        y:{ grid:{color:gridColor}, ticks:{color:textColor,font:{family:'DM Mono, monospace',size:9}},
+            suggestedMin:0, suggestedMax: Math.max(80, postRmssd+20) }
+      }
+    }
+  });
+  if(window.HRV) window.HRV.chart = chart;
+}
+
+/* ── Event wiring ── */
+setTimeout(function(){
+  // Import button
+  var importBtn = document.getElementById('hrvImportBtn');
+  if(importBtn) importBtn.addEventListener('click', function(){
+    if(_pendingPayload){
+      buildReportFromHK(_pendingPayload);
+      _pendingPayload = null;
+    } else {
+      // Tentativo manuale: leggi clipboard al momento del tap
+      if(navigator.clipboard && navigator.clipboard.readText){
+        navigator.clipboard.readText().then(function(text){
+          var parsed = tryParseHKPayload(text);
+          if(parsed){
+            buildReportFromHK(parsed);
+          } else {
+            dlog&&dlog('HRV · Shortcut · nessun payload HealthKit valido in clipboard','error');
+            dlog&&dlog('HRV · Shortcut · formato atteso: {"source":"healthkit","baseline":{"hrv_sdnn_ms":38},"post":{"hrv_sdnn_ms":52}}','warn');
+          }
+        }).catch(function(e){
+          dlog&&dlog('HRV · Shortcut · impossibile leggere clipboard: '+e.message,'error');
+        });
+      }
+    }
+  });
+
+  // Dismiss button
+  var dismissBtn = document.getElementById('hrvImportDismiss');
+  if(dismissBtn) dismissBtn.addEventListener('click', function(){
+    hideImportBar();
+    _pendingPayload = null;
+    dlog&&dlog('HRV · Shortcut · import ignorato','warn');
+  });
+
+  // Controlla clipboard quando la pagina torna visibile (es. dopo switch da Shortcuts a Safari)
+  document.addEventListener('visibilitychange', function(){
+    if(document.visibilityState === 'visible' && !window.HRV?.connected){
+      setTimeout(checkClipboardOnFocus, 400);
+    }
+  });
+
+  // Check iniziale (utile se la PWA era già aperta)
+  if(!window.HRV?.connected) checkClipboardOnFocus();
+
+  dlog&&dlog('HRV · Shortcut Bridge attivo · in attesa payload HealthKit da clipboard','ok');
+}, 300);
+
+/* ── Espone API pubblica per uso da console/debug ── */
+window.HRVShortcut = {
+  parse:  tryParseHKPayload,
+  import: buildReportFromHK,
+  check:  checkClipboardOnFocus,
+  // Testa con dati fittizi (solo per sviluppo)
+  testDev: function(){
+    var fake = '{"source":"healthkit","version":1,"exportedAt":"'+new Date().toISOString()+'","baseline":{"hrv_sdnn_ms":38,"bpm_avg":68},"post":{"hrv_sdnn_ms":55,"bpm_avg":61}}';
+    dlog&&dlog('HRV · Shortcut · TEST DEV con payload sintetico','warn');
+    var p = tryParseHKPayload(fake);
+    if(p) buildReportFromHK(p);
+  }
+};
+
+})(); /* end HRV Shortcut Bridge */
 dlog('App inizializzata · Web Audio API v2 · EQ 4 bande · Binaural + MP3 gapless');
 loadEQ();
 var hadSaved=loadSettings();
